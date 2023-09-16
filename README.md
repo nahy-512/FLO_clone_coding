@@ -1,2 +1,3 @@
-# udemy_android_template_bottomnavi
-안드로이드 플로 클론 1주차에 필요한 템플릿입니다.
+# udemy_android_clone_coding
+안드로이드 플로 클론 코딩
+유데미 강의를 보고 만들었습니다.
