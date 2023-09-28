@@ -667,28 +667,19 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_main_twitter" />
         </LinearLayout>
-        <LinearLayout
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="15dp"
-            android:gravity="center_vertical"
+            android:text="(주)드림어스컴퍼니 사업자 정보"
+            android:textColor="@color/gray_color"
+            android:textSize="15sp"
+            android:drawableEnd="@drawable/drawable_end_img_custom"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/home_sns_ll"
-            app:layout_constraintBottom_toBottomOf="parent">
-            <TextView
-                android:id="@+id/home_entrepreneur_info_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="(주)드림어스컴퍼니 사업자 정보"
-                android:textColor="@color/gray_color"
-                android:textSize="15sp"/>
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="5dp"
-                android:src="@drawable/btn_main_arrow_more"/>
-        </LinearLayout>
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
