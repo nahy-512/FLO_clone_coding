@@ -18,6 +18,10 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
+        binding.homeAlbum1CoverIv.setOnClickListener {
+            (context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.main_frm, AlbumFragment()).commitAllowingStateLoss()
+        }
+
         return binding.root
     }
 }
