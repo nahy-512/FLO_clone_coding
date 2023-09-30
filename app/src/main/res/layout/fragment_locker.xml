@@ -26,7 +26,7 @@
         android:layout_marginEnd="15dp"
         android:text="로그인"
         android:textColor="@color/select_color"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintTop_toTopOf="@id/locker_title_tv"
         app:layout_constraintBottom_toBottomOf="@id/locker_title_tv"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -36,10 +36,12 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        app:tabTextAppearance="@style/tab_text_appearance"
         app:tabGravity="start"
         app:tabIndicatorFullWidth="false"
         app:tabSelectedTextColor="@color/select_color"
         app:tabIndicatorColor="@color/select_color"
+        app:tabTextColor="@color/dark_gray_color"
         app:tabRippleColor="@color/transparent"
         app:layout_constraintTop_toBottomOf="@id/locker_title_tv"
         app:layout_constraintStart_toStartOf="parent"/>
