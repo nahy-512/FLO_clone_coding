@@ -12,6 +12,8 @@ class SongFragment : Fragment() {
 
     lateinit var binding: FragmentSongBinding
 
+    private var isMix: Boolean = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -19,6 +21,19 @@ class SongFragment : Fragment() {
     ): View? {
         binding = FragmentSongBinding.inflate(inflater, container, false)
 
+        binding.albumMyFavMixToggleIv.setOnClickListener {
+            setMixStatus(!isMix)
+        }
+
         return binding.root
+    }
+
+    private fun setMixStatus(isMix: Boolean) {
+        if (isMix) { // 내 취향 믹스
+            binding.albumMyFavMixToggleIv.setImageResource(R.drawable.btn_toggle_on)
+        } else {
+            binding.albumMyFavMixToggleIv.setImageResource(R.drawable.btn_toggle_off)
+        }
+        this.isMix = isMix
     }
 }

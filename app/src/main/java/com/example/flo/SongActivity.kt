@@ -11,6 +11,9 @@ class SongActivity : AppCompatActivity() {
 
     lateinit var binding: ActivitySongBinding
 
+    private var isRepeat: Boolean = false
+    private var isRandom: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -18,11 +21,22 @@ class SongActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+        onClickListener()
+
+        // title과 singer라는 키 값을 가진 intent가 존재하는지 판별
+        if (intent.hasExtra("title") && intent.hasExtra("singer")) {
+            binding.songTitleTv.text = intent.getStringExtra("title")
+            binding.songSingerTv.text = intent.getStringExtra("singer")
+        }
+    }
+
+    private fun onClickListener() {
         binding.songDownIv.setOnClickListener {
             sendAlbumTitle()
             finish()
         }
 
+        /* 재생 버튼 */
         binding.songPlayerPlayIv.setOnClickListener {
             setPlayerStatus(true)
         }
@@ -30,10 +44,14 @@ class SongActivity : AppCompatActivity() {
             setPlayerStatus(false)
         }
 
-        // title과 singer라는 키 값을 가진 intent가 존재하는지 판별
-        if (intent.hasExtra("title") && intent.hasExtra("singer")) {
-            binding.songTitleTv.text = intent.getStringExtra("title")
-            binding.songSingerTv.text = intent.getStringExtra("singer")
+        /* 반복 재생 버튼 */
+        binding.songPlayerRepeatIv.setOnClickListener {
+            setRepeatStatus(!isRepeat)
+        }
+
+        /* 전체 재생 버튼 */
+        binding.songPlayerRandomIv.setOnClickListener {
+            setRandomStatus(!isRandom)
         }
     }
 
@@ -52,5 +70,23 @@ class SongActivity : AppCompatActivity() {
             binding.songPlayerPlayIv.visibility = View.VISIBLE
             binding.songPlayerPauseIv.visibility = View.GONE
         }
+    }
+
+    private fun setRepeatStatus(isRepeat: Boolean) {
+        if (isRepeat) { // 반복 상태
+            binding.songPlayerRepeatIv.setImageResource(R.drawable.btn_player_repeat_on_light)
+        } else {
+            binding.songPlayerRepeatIv.setImageResource(R.drawable.nugu_btn_repeat_inactive)
+        }
+        this.isRepeat = isRepeat
+    }
+
+    private fun setRandomStatus(isRandom: Boolean) {
+        if (isRandom) { // 반복 상태
+            binding.songPlayerRandomIv.setImageResource(R.drawable.btn_player_random_on_light)
+        } else {
+            binding.songPlayerRandomIv.setImageResource(R.drawable.nugu_btn_random_inactive)
+        }
+        this.isRandom = isRandom
     }
 }
