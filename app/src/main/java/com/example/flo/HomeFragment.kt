@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
 import com.example.flo.databinding.FragmentHomeBinding
 import java.io.ByteArrayOutputStream
 
@@ -29,6 +30,14 @@ class HomeFragment : Fragment() {
         binding.homeAlbum1CoverIv.setOnClickListener {
             moveToAlbumFragment()
         }
+
+        val bannerAdapter = BannerVPAdater(this)
+        bannerAdapter.addFragment(BannerFragment(R.drawable.img_home_viewpager_exp))
+        bannerAdapter.addFragment(BannerFragment(R.drawable.img_home_viewpager_exp2))
+        // 뷰페이저와 어댑터 연결
+        binding.homeBannerVp.adapter = bannerAdapter
+        // 뷰페이저 좌우 스크롤 지정
+        binding.homeBannerVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
         return binding.root
     }
