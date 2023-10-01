@@ -1,17 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="상세정보 프래그먼트"
-        android:textSize="30sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:layout_marginTop="20dp"
+        android:paddingHorizontal="16dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:id="@+id/detail_info_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="앨범명"
+                    style="@style/detail_info_title_tv"/>
+
+                <TextView
+                    android:layout_marginTop="@dimen/detail_default_spacing"
+                    android:text="아티스트"
+                    style="@style/detail_info_title_tv"/>
+
+                <TextView
+                    android:layout_marginTop="@dimen/detail_default_spacing"
+                    android:text="발매사"
+                    style="@style/detail_info_title_tv"/>
+
+                <TextView
+                    android:layout_marginTop="@dimen/detail_default_spacing"
+                    android:text="기획사"
+                    style="@style/detail_info_title_tv" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/detail_album_name_tv"
+                    android:text="IU 5th Album 'LILAC'"
+                    style="@style/detail_info_content_tv"/>
+
+                <TextView
+                    android:id="@+id/detail_artist_tv"
+                    android:layout_marginTop="@dimen/detail_default_spacing"
+                    android:text="아이유 (IU)"
+                    style="@style/detail_info_content_tv"/>
+
+                <TextView
+                    android:id="@+id/detail_publish_tv"
+                    android:layout_marginTop="@dimen/detail_default_spacing"
+                    android:text="카카오엔터테인먼트"
+                    style="@style/detail_info_content_tv"/>
+
+                <TextView
+                    android:id="@+id/detail_agency_tv"
+                    android:layout_marginTop="@dimen/detail_default_spacing"
+                    android:text="EDAM엔터테인먼트"
+                    style="@style/detail_info_content_tv"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/detail_album_info_tv"
+            android:layout_marginTop="30dp"
+            android:text="앨범정보"
+            app:layout_constraintTop_toBottomOf="@id/detail_info_layout"
+            app:layout_constraintStart_toStartOf="@id/detail_album_info_tv"
+            style="@style/detail_info_title_tv"/>
+
+        <TextView
+            android:id="@+id/detail_album_info_content_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="50dp"
+            android:text="@string/detail_album_info_content"
+            app:layout_constraintTop_toBottomOf="@id/detail_album_info_tv"
+            app:layout_constraintStart_toStartOf="@id/detail_album_info_tv"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0"
+            style="@style/detail_info_content_tv"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
