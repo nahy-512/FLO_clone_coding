@@ -6,6 +6,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +24,15 @@ class HomeFragment : Fragment() {
 
     lateinit var binding: FragmentHomeBinding
 
+    var currentPosition = 0
+
+    // 핸들러 설정
+    val handler = Handler(Looper.getMainLooper()){
+        // ui 변경하기
+        setPage()
+        true
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,13 +44,8 @@ class HomeFragment : Fragment() {
             moveToAlbumFragment()
         }
 
-        val bannerAdapter = BannerVPAdater(this)
-        bannerAdapter.addFragment(BannerFragment(R.drawable.img_home_viewpager_exp))
-        bannerAdapter.addFragment(BannerFragment(R.drawable.img_home_viewpager_exp2))
-        // 뷰페이저와 어댑터 연결
-        binding.homeBannerVp.adapter = bannerAdapter
-        // 뷰페이저 좌우 스크롤 지정
-        binding.homeBannerVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        setPanelAdapter()
+        setBannerAdapter()
 
         return binding.root
     }
@@ -64,5 +72,61 @@ class HomeFragment : Fragment() {
         albumFragment.arguments = bundle
 
         (context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.main_frm, albumFragment).commitAllowingStateLoss()
+    }
+
+    private fun setPanelAdapter() {
+        val viewpager = binding.homePanelImgVp
+        val panelAdapter = PanelVPAdapter(this)
+        /* 데이터 집어넣기 */
+        panelAdapter.addFragment(PanelFragment(R.drawable.img_first_album_default))
+        panelAdapter.addFragment(PanelFragment(R.drawable.img_album_exp4))
+        panelAdapter.addFragment(PanelFragment(R.drawable.img_album_exp6))
+        panelAdapter.addFragment(PanelFragment(R.drawable.img_album_exp8))
+        // 뷰페이저와 어댑터 연결
+        viewpager.adapter = panelAdapter
+        // 뷰페이저 좌우 스크롤 지정
+        viewpager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        // 인디케이터 세팅
+        val indicator = binding.homePanelIndicator
+        indicator.setViewPager(viewpager)
+        indicator.createIndicators(4,0);
+        indicator.animatePageSelected(2)
+
+        // 뷰페이저 넘기는 쓰레드
+        val thread=Thread(PagerRunnable())
+        thread.start()
+    }
+
+
+    // 페이지 변경하기
+    private fun setPage(){
+        // 마지막 페이지면 처음으로 다시 돌아가도록
+        if (currentPosition == 4) currentPosition = 0
+        binding.homePanelImgVp.setCurrentItem(currentPosition,true)
+        currentPosition += 1
+    }
+
+    // 3초마다 페이지 넘기기
+    inner class PagerRunnable : Runnable{
+        override fun run() {
+            while(true) {
+                try {
+                    Thread.sleep(3000)
+                    handler.sendEmptyMessage(0)
+                } catch (e : InterruptedException){
+                    Log.d("HomeFragment", "interupt 발생")
+                }
+            }
+        }
+    }
+
+    private fun setBannerAdapter() {
+        val bannerAdapter = BannerVPAdater(this)
+        bannerAdapter.addFragment(BannerFragment(R.drawable.img_home_viewpager_exp))
+        bannerAdapter.addFragment(BannerFragment(R.drawable.img_home_viewpager_exp2))
+        // 뷰페이저와 어댑터 연결
+        binding.homeBannerVp.adapter = bannerAdapter
+        // 뷰페이저 좌우 스크롤 지정
+        binding.homeBannerVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
     }
 }
