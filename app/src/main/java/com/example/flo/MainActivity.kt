@@ -35,13 +35,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun moveToSongActivity() {
-        val song = Song(binding.mainMiniplayerTitleTv.text.toString(), binding.mainMiniplayerSingerTv.text.toString())
+        val song = Song(binding.mainMiniplayerTitleTv.text.toString(), binding.mainMiniplayerSingerTv.text.toString(), 0, 60, false)
         Log.d("Song", song.title + song.singer)
 
         binding.mainPlayerCl.setOnClickListener {
             val intent = Intent(this, SongActivity::class.java)
             intent.putExtra("title", song.title)
             intent.putExtra("singer", song.singer)
+            intent.putExtra("second", song.second)
+            intent.putExtra("playTime", song.playTime)
+            intent.putExtra("isPlaying", song.isPlaying)
 //            startActivity(intent)
             // SongActivity에서 돌아올 때 받은 앨범 제목
             getResultText.launch(intent)
