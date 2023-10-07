@@ -7,7 +7,8 @@
     <ImageView
         android:id="@+id/banner_image_iv"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintDimensionRatio="1025:220"
         android:scaleType="fitXY"
         android:src="@drawable/img_home_viewpager_exp"
         app:layout_constraintTop_toTopOf="parent"
