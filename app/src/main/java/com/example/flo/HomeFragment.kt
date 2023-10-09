@@ -89,7 +89,7 @@ class HomeFragment : Fragment() {
         // 인디케이터 세팅
         val indicator = binding.homePanelIndicator
         indicator.setViewPager(viewpager)
-        indicator.createIndicators(4,0);
+        indicator.createIndicators(4,0)
         indicator.animatePageSelected(2)
 
         // 뷰페이저 넘기는 쓰레드
