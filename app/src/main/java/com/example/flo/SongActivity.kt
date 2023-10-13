@@ -1,21 +1,22 @@
 package com.example.flo
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.example.flo.databinding.ActivitySongBinding
+import com.google.gson.Gson
 
 class SongActivity : AppCompatActivity() {
 
     lateinit var binding: ActivitySongBinding
     lateinit var song: Song
     lateinit var timer: Timer
+    private var mediaPlayer: MediaPlayer? = null
+    private var gson: Gson = Gson()
 
     private var isRepeat: Boolean = false
     private var isRandom: Boolean = false
@@ -28,14 +29,36 @@ class SongActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         onClickListener()
+    }
 
+    override fun onStart() {
+        super.onStart()
+        // 미니플레이어에서 받아온
         initSong()
         setPlayer(song)
+    }
+
+    // 사용자가 포커스를 잃었을 때 음악이 중지
+    override fun onPause() {
+        super.onPause()
+        setPlayerStatus(false)
+        song.second = ((binding.songPlayProgressSb.progress * song.playTime)/100)/1000 // 재생 시간을 초 단위로 변환
+
+        // 어플이 종료해도 데이터가 남아있을 수 있도록 내부 저장소에 저장
+        val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
+        val editor = sharedPreferences.edit() // 에디터
+        val songJson = gson.toJson(song)
+        editor.putString("songData", songJson)
+        editor.apply()
+//        editor.putString("title", song.title)
+//        editor.putString("singer", song.singer) ...
     }
 
     override fun onDestroy() {
         super.onDestroy()
         timer.interrupt()
+        mediaPlayer?.release() // 미디어플레이어가 가지고 있던 리소스 해제
+        mediaPlayer = null // 미디어 플레이어 해제
     }
 
     private fun onClickListener() {
@@ -70,7 +93,8 @@ class SongActivity : AppCompatActivity() {
                 intent.getStringExtra("singer")!!,
                 intent.getIntExtra("second", 0),
                 intent.getIntExtra("playTime", 0),
-                intent.getBooleanExtra("isPlaying", false)
+                intent.getBooleanExtra("isPlaying", false),
+                intent.getStringExtra("music")!!
             )
         }
         // 타이머 시작
@@ -78,12 +102,17 @@ class SongActivity : AppCompatActivity() {
     }
 
     private fun setPlayer(song: Song) {
-        binding.songTitleTv.text = intent.getStringExtra("title")
-        binding.songSingerTv.text = intent.getStringExtra("singer")
-        binding.songPlayStartTimeTv.text = String.format("%02d:%02d", song.second / 60, song.second % 60)
-        binding.songPlayEndTimeTv.text = String.format("%02d:%02d", song.playTime / 60, song.playTime % 60)
-        binding.songPlayProgressSb.progress = (song.second * 1000 / song.playTime)
-
+        with (binding) {
+            songTitleTv.text = intent.getStringExtra("title")
+            songSingerTv.text = intent.getStringExtra("singer")
+            songPlayStartTimeTv.text = String.format("%02d:%02d", song.second / 60, song.second % 60)
+            songPlayEndTimeTv.text = String.format("%02d:%02d", song.playTime / 60, song.playTime % 60)
+            songPlayProgressSb.progress = (song.second * 1000 / song.playTime)
+        }
+        // 음악 파일을 찾아서 넣어줌
+        val music = resources.getIdentifier(song.music, "raw", this.packageName)
+        mediaPlayer = MediaPlayer.create(this, music)
+        // 재생 버튼 및 음악 재생 상태 지정
         setPlayerStatus(song.isPlaying)
     }
 
@@ -101,9 +130,15 @@ class SongActivity : AppCompatActivity() {
         if (isPlaying) { // 재생 상태
             binding.songPlayerPlayIv.visibility = View.GONE
             binding.songPlayerPauseIv.visibility = View.VISIBLE
+            // 음악 재생
+            mediaPlayer?.start()
         } else { // 정지 상태
             binding.songPlayerPlayIv.visibility = View.VISIBLE
             binding.songPlayerPauseIv.visibility = View.GONE
+            if (mediaPlayer?.isPlaying == true) { // 음악 재생 중일 떄
+                // 음악 중지
+                mediaPlayer?.pause()
+            }
         }
     }
 
