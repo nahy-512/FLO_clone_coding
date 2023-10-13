@@ -8,12 +8,16 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.flo.databinding.ActivityMainBinding
+import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
 
     companion object { const val STRING_INTENT_KEY = "song_key" }
 
     lateinit var binding: ActivityMainBinding
+
+    private var song: Song = Song()
+    private var gson: Gson = Gson()
 
     private val getResultText = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -35,8 +39,31 @@ class MainActivity : AppCompatActivity() {
         initBottomNavigation()
     }
 
+    override fun onStart() {
+        super.onStart()
+        val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
+        val songJson = sharedPreferences.getString("songData", null)
+
+        song = if (songJson == null) { // 데이터가 존재하지 않으면 Song 데이터를 직접 넣어줌
+            Song("라일락", "아이유(IU)", 0, 60, false, "music_lilac")
+        } else { // 존재하면 저장된 데이터를 넣어줌
+            gson.fromJson(songJson, Song::class.java)
+        }
+
+        // 미니플레이어에 데이터 반영
+        setMiniPlayer(song)
+    }
+
+    private fun setMiniPlayer(song: Song) {
+        with(binding) {
+            mainMiniplayerTitleTv.text = song.title
+            mainMiniplayerSingerTv.text = song.singer
+            mainMiniplayerProgressSb.progress= (song.second * 100000) / song.playTime
+        }
+    }
+
     private fun moveToSongActivity() {
-        val song = Song(binding.mainMiniplayerTitleTv.text.toString(), binding.mainMiniplayerSingerTv.text.toString(), 0, 60, false)
+//        val song = Song(binding.mainMiniplayerTitleTv.text.toString(), binding.mainMiniplayerSingerTv.text.toString(), 0, 60, false, "music_lilac")
         Log.d("Song", song.title + song.singer)
 
         binding.mainPlayerCl.setOnClickListener {
@@ -46,6 +73,7 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("second", song.second)
             intent.putExtra("playTime", song.playTime)
             intent.putExtra("isPlaying", song.isPlaying)
+            intent.putExtra("music", song.music)
 //            startActivity(intent)
             // SongActivity에서 돌아올 때 받은 앨범 제목
             getResultText.launch(intent)
