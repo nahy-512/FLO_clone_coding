@@ -18,7 +18,7 @@ class SongActivity : AppCompatActivity() {
     private var mediaPlayer: MediaPlayer? = null
     private var gson: Gson = Gson()
 
-    private var isRepeat: Boolean = false
+    private var repeatState: Int = 0
     private var isRandom: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,12 +27,15 @@ class SongActivity : AppCompatActivity() {
         binding = ActivitySongBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
+
+        // 미니플레이어에서 받아온 정보를 song 인스턴스에 저장
+        initSong()
     }
 
     override fun onStart() {
         super.onStart()
-        // 미니플레이어에서 받아온
-        initSong()
+
+        // song 정보로 UI 업데이트
         setPlayer(song)
         onClickListener()
     }
@@ -42,6 +45,7 @@ class SongActivity : AppCompatActivity() {
         super.onPause()
         setPlayerStatus(false)
         song.second = ((binding.songPlayProgressSb.progress * song.playTime)/100)/1000 // 재생 시간을 초 단위로 변환
+//        Log.d("onPause()", "현재 재생 시간: ${song.second}")
 
         // 어플이 종료해도 데이터가 남아있을 수 있도록 내부 저장소에 저장
         val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
@@ -74,7 +78,7 @@ class SongActivity : AppCompatActivity() {
 
         /* 반복 재생 버튼 */
         binding.songPlayerRepeatIv.setOnClickListener {
-            setRepeatStatus(!isRepeat)
+            setRepeatStatus(repeatState)
         }
 
         /* 전체 재생 버튼 */
@@ -147,13 +151,13 @@ class SongActivity : AppCompatActivity() {
         }
     }
 
-    private fun setRepeatStatus(isRepeat: Boolean) {
-        if (isRepeat) { // 반복 상태
-            binding.songPlayerRepeatIv.setImageResource(R.drawable.btn_player_repeat_on_light)
-        } else {
-            binding.songPlayerRepeatIv.setImageResource(R.drawable.nugu_btn_repeat_inactive)
+    private fun setRepeatStatus(repeatState: Int) {
+        this.repeatState = (repeatState + 1) % 3
+        when (this.repeatState) {
+            0 -> binding.songPlayerRepeatIv.setImageResource(R.drawable.nugu_btn_repeat_inactive) // 반복 X
+            1 -> binding.songPlayerRepeatIv.setImageResource(R.drawable.btn_playlist_repeat_on1) // 한곡 재생
+            else -> binding.songPlayerRepeatIv.setImageResource(R.drawable.btn_player_repeat_on_light) // 반복 재생
         }
-        this.isRepeat = isRepeat
     }
 
     private fun setRandomStatus(isRandom: Boolean) {
@@ -170,6 +174,20 @@ class SongActivity : AppCompatActivity() {
         timer?.start()
     }
 
+    private fun initializeMusic(isPlaying: Boolean) {
+        // 재생 시간 초기화
+        song.second  = 0
+        song.isPlaying = isPlaying
+        runOnUiThread {
+            setPlayerStatus(isPlaying)
+            binding.songPlayProgressSb.progress = song.second
+            binding.songPlayStartTimeTv.text = String.format("%02d:%02d", song.second / 60, song.second % 60)
+            setPlayer(song)
+        }
+        // 스레드 종료
+        Thread.sleep(50)
+    }
+
     inner class Timer(private val playTime: Int, var isPlaying: Boolean = true): Thread() {
 
         private var second: Int = song.second // 이전 시작 시간부터 이어서 설정
@@ -181,18 +199,10 @@ class SongActivity : AppCompatActivity() {
                 // 타이머는 계속 진행되어야 함
                 while (true) {
                     if (second >= playTime) { // 노래 재생 시간이 다 끝나면 종료
-                        // 재생 시간 초기화
-                        song.second  = 0
-                        isPlaying = false
-                        song.isPlaying = false
-                        runOnUiThread {
-                            setPlayerStatus(isPlaying)
-                            binding.songPlayProgressSb.progress = second
-                            binding.songPlayStartTimeTv.text = String.format("%02d:%02d", second / 60, second % 60)
-                            setPlayer(song)
+                        when (repeatState) {
+                            1 -> initializeMusic(true) // 한곡 재생 상태에서는 바로 초기화해서 다시 재생
+                            else -> initializeMusic(false) // 그 이외의 경우에는 음악 재생 중지
                         }
-                        // 스레드 종료
-                        sleep(50)
                         break
                     }
 
