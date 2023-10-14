@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         val songJson = sharedPreferences.getString("songData", null)
 
         song = if (songJson == null) { // 데이터가 존재하지 않으면 Song 데이터를 직접 넣어줌
-            Song("라일락", "아이유(IU)", 0, 60, false, "music_lilac")
+            Song("제목", "가수", 0, 60, false, "music_lilac")
         } else { // 존재하면 저장된 데이터를 넣어줌
             gson.fromJson(songJson, Song::class.java)
         }

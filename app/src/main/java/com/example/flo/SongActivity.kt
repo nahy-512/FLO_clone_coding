@@ -49,8 +49,6 @@ class SongActivity : AppCompatActivity() {
         val songJson = gson.toJson(song)
         editor.putString("songData", songJson)
         editor.apply()
-//        editor.putString("title", song.title)
-//        editor.putString("singer", song.singer) ...
     }
 
     override fun onDestroy() {
@@ -183,6 +181,18 @@ class SongActivity : AppCompatActivity() {
                 // 타이머는 계속 진행되어야 함
                 while (true) {
                     if (second >= playTime) { // 노래 재생 시간이 다 끝나면 종료
+                        // 재생 시간 초기화
+                        song.second  = 0
+                        isPlaying = false
+                        song.isPlaying = false
+                        runOnUiThread {
+                            setPlayerStatus(isPlaying)
+                            binding.songPlayProgressSb.progress = second
+                            binding.songPlayStartTimeTv.text = String.format("%02d:%02d", second / 60, second % 60)
+                            setPlayer(song)
+                        }
+                        // 스레드 종료
+                        sleep(50)
                         break
                     }
 
@@ -204,7 +214,7 @@ class SongActivity : AppCompatActivity() {
                         }
                     }
                 }
-            }catch (e: InterruptedException) {
+            } catch (e: InterruptedException) {
                 Log.d("Song", "쓰레드가 죽었습니다. ${e.message}")
             }
         }
