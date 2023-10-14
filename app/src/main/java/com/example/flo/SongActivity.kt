@@ -14,7 +14,7 @@ class SongActivity : AppCompatActivity() {
 
     lateinit var binding: ActivitySongBinding
     lateinit var song: Song
-    lateinit var timer: Timer
+    private var timer: Timer? = null
     private var mediaPlayer: MediaPlayer? = null
     private var gson: Gson = Gson()
 
@@ -27,8 +27,6 @@ class SongActivity : AppCompatActivity() {
         binding = ActivitySongBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
-
-        onClickListener()
     }
 
     override fun onStart() {
@@ -36,6 +34,7 @@ class SongActivity : AppCompatActivity() {
         // 미니플레이어에서 받아온
         initSong()
         setPlayer(song)
+        onClickListener()
     }
 
     // 사용자가 포커스를 잃었을 때 음악이 중지
@@ -56,7 +55,7 @@ class SongActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        timer.interrupt()
+        timer?.interrupt()
         mediaPlayer?.release() // 미디어플레이어가 가지고 있던 리소스 해제
         mediaPlayer = null // 미디어 플레이어 해제
     }
@@ -92,28 +91,36 @@ class SongActivity : AppCompatActivity() {
                 intent.getStringExtra("title")!!,
                 intent.getStringExtra("singer")!!,
                 intent.getIntExtra("second", 0),
-                intent.getIntExtra("playTime", 0),
+                intent.getIntExtra("playTime", 60),
                 intent.getBooleanExtra("isPlaying", false),
                 intent.getStringExtra("music")!!
             )
         }
-        // 타이머 시작
-        startTimer()
     }
 
     private fun setPlayer(song: Song) {
-        with (binding) {
-            songTitleTv.text = intent.getStringExtra("title")
-            songSingerTv.text = intent.getStringExtra("singer")
-            songPlayStartTimeTv.text = String.format("%02d:%02d", song.second / 60, song.second % 60)
-            songPlayEndTimeTv.text = String.format("%02d:%02d", song.playTime / 60, song.playTime % 60)
-            songPlayProgressSb.progress = (song.second * 1000 / song.playTime)
-        }
         // 음악 파일을 찾아서 넣어줌
         val music = resources.getIdentifier(song.music, "raw", this.packageName)
         mediaPlayer = MediaPlayer.create(this, music)
         // 재생 버튼 및 음악 재생 상태 지정
         setPlayerStatus(song.isPlaying)
+
+        // 음악 종료 시간 설정
+        song.playTime = mediaPlayer?.duration!! / 1000
+
+        // 위젯 반영
+        with (binding) {
+            songTitleTv.text = intent.getStringExtra("title")
+            songSingerTv.text = intent.getStringExtra("singer")
+            songPlayStartTimeTv.text = String.format("%02d:%02d", song.second / 60, song.second % 60)
+            songPlayEndTimeTv.text = String.format("%02d:%02d", song.playTime / 60, song.playTime % 60)
+            // 이전 재생 시간 반영
+            mediaPlayer?.seekTo(song.second * 1000)
+            songPlayProgressSb.progress = song.second * 100000 / song.playTime
+        }
+
+        // 타이머 시작
+        startTimer(song.playTime)
     }
 
     private fun sendAlbumTitle() {
@@ -125,7 +132,7 @@ class SongActivity : AppCompatActivity() {
 
     private fun setPlayerStatus(isPlaying: Boolean) {
         song.isPlaying = isPlaying
-        timer.isPlaying = isPlaying
+        timer?.isPlaying = isPlaying
 
         if (isPlaying) { // 재생 상태
             binding.songPlayerPlayIv.visibility = View.GONE
@@ -160,15 +167,15 @@ class SongActivity : AppCompatActivity() {
         this.isRandom = isRandom
     }
 
-    private fun startTimer() {
-        timer = Timer(song.playTime, song.isPlaying)
-        timer.start()
+    private fun startTimer(playTime: Int) {
+        timer = Timer(playTime, song.isPlaying)
+        timer?.start()
     }
 
-    inner  class Timer(private val playTime: Int, var isPlaying: Boolean = true): Thread() {
+    inner class Timer(private val playTime: Int, var isPlaying: Boolean = true): Thread() {
 
-        private var second: Int = 0
-        private var mills: Float = 0f
+        private var second: Int = song.second // 이전 시작 시간부터 이어서 설정
+        private var mills: Float = second.toFloat() * 1000
 
         override fun run() {
             super.run()
