@@ -11,10 +11,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.flo.databinding.FragmentAlbumBinding
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.Gson
 
 class AlbumFragment : Fragment() {
 
     lateinit var binding: FragmentAlbumBinding
+    private var gson: Gson = Gson()
 
     private val information = arrayListOf("수록곡", "상세정보", "영상")
 
@@ -43,19 +45,17 @@ class AlbumFragment : Fragment() {
     }
 
     private fun receiveHomeData() {
-        // 번들로부터 ByteArray 받아오기
-        val byteArray = arguments?.getByteArray("img")
+        // argument에서 데이터를 꺼내기
+        val albumJson = arguments?.getString("album")
+        val album = gson.fromJson(albumJson, Album::class.java)
+        // 바인딩
+        setInit(album)
+    }
 
-        if (byteArray != null) {
-            // ByteArray를 Bitmap으로 변환
-            val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-
-            // 앨범 커버 이미지에 Bitmap 설정
-            binding.albumCoverImgIv.setImageBitmap(bitmap)
-        }
-//        arguments?.getInt("img")?.let { binding.albumCoverImgIv.setImageResource(it) }
-        // 앨범 제목, 가수 설정
-        binding.albumTitleTv.text = arguments?.getString("title")
-        binding.albumSingerTv.text = arguments?.getString("singer")
+    private fun setInit(album: Album) {
+        // 앨범 제목, 가수, 이미지 설정
+        binding.albumTitleTv.text = album.title
+        binding.albumSingerTv.text = album.singer
+        album.coverImg?.let { binding.albumCoverImgIv.setImageResource(it) }
     }
 }
