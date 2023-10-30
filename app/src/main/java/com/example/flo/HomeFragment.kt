@@ -1,28 +1,22 @@
 package com.example.flo
 
-import android.app.Activity
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.os.Message
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.flo.databinding.FragmentHomeBinding
-import java.io.ByteArrayOutputStream
+import com.google.gson.Gson
 
 class HomeFragment : Fragment() {
 
     lateinit var binding: FragmentHomeBinding
+    private var albumDatas = ArrayList<Album>()
 
     var currentPosition = 0
 
@@ -40,9 +34,7 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        binding.homeAlbum1CoverIv.setOnClickListener {
-            moveToAlbumFragment()
-        }
+        initAlbumRV()
 
         setPanelAdapter()
         setBannerAdapter()
@@ -50,28 +42,43 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    private fun moveToAlbumFragment() {
-        val albumFragment = AlbumFragment()
+    private fun initAlbumRV() {
+        // 데이터 리스트 생성 더미 데이터
+        albumDatas.apply {
+            add(Album("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp))
+            add(Album("Lilac", "아이유 (IU)", R.drawable.img_album_exp2))
+            add(Album("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3))
+            add(Album("Boy with Luv", "방탄소년단 (BTS)", R.drawable.img_album_exp4))
+            add(Album("BB0om BBoom", "모모랜드 (MOMOLANS)", R.drawable.img_album_exp5))
+            add(Album("Weekend", "태연 (Tae Yeon)", R.drawable.img_album_exp6))
+        }
 
-        val bundle = Bundle()
+        // 어댑터와 데이터 리스트 연결
+        val albumRVAdapter = AlbumRVAdapter(albumDatas)
+        // 리사이클러뷰에 어댑터 연결
+        binding.homeTodayMusicAlbumRv.adapter = albumRVAdapter
+        // 레이아웃 매니저 설정
+        binding.homeTodayMusicAlbumRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-        // 이미지뷰의 이미지를 비트맵으로 변환
-        val bitmap = (binding.homeAlbum1CoverIv.drawable as BitmapDrawable).bitmap
+        /* 아이템 클릭 이벤트 */
+        albumRVAdapter.setMyItemClickListener(object : AlbumRVAdapter.MyItemClickListener {
+            override fun onItemClick(album: Album) {
+                // 앨범 프레그먼트로 전환
+                moveToAlbumFragment(album)
+            }
+        })
+    }
 
-        // 비트맵을 ByteArray로 직렬화
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-        val byteArray = byteArrayOutputStream.toByteArray()
-
-        // bundle에 데이터 담기
-        bundle.putByteArray("img", byteArray)
-//        bundle.putInt("img", R.drawable.img_album_exp2)
-        bundle.putString("title", binding.homeAlbum1TitleTv.text.toString())
-        bundle.putString("singer", binding.homeAlbum1SingerTv.text.toString())
-        // albumFragment의 arguments에 데이터를 담은 bundle을 넘겨줌
-        albumFragment.arguments = bundle
-
-        (context as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.main_frm, albumFragment).commitAllowingStateLoss()
+    private fun moveToAlbumFragment(album: Album) {
+        (context as MainActivity).supportFragmentManager.beginTransaction()
+            .replace(R.id.main_frm, AlbumFragment().apply {
+                arguments = Bundle().apply {
+                    val gson = Gson()
+                    val albumJson = gson.toJson(album)
+                    putString("album", albumJson)
+                }
+            })
+            .commitAllowingStateLoss()
     }
 
     private fun setPanelAdapter() {
