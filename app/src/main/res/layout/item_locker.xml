@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="12dp"
+    android:layout_marginHorizontal="10dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/item_locker_cover_img_cv"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:cardCornerRadius="7dp"
+        app:cardElevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:id="@+id/item_locker_cover_img_iv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/img_album_exp2" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/item_album_title_tv"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="LILAC"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/item_locker_cover_img_cv"
+        app:layout_constraintEnd_toStartOf="@id/item_locker_btn_ll"
+        app:layout_constraintTop_toTopOf="@id/item_locker_cover_img_cv"/>
+
+    <TextView
+        android:id="@+id/item_locker_singer_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:text="아이유 (IU)"
+        android:textColor="@color/gray_color"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@id/item_album_title_tv"
+        app:layout_constraintTop_toBottomOf="@id/item_album_title_tv" />
+
+    <LinearLayout
+        android:id="@+id/item_locker_btn_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/item_locker_play_iv"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/btn_miniplayer_play"/>
+
+        <ImageView
+            android:id="@+id/item_locker_more_iv"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/btn_player_more"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
