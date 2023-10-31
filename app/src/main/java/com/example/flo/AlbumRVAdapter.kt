@@ -9,6 +9,8 @@ class AlbumRVAdapter(private val albumList: ArrayList<Album>): RecyclerView.Adap
 
     interface MyItemClickListener {
         fun onItemClick(album: Album)
+//        fun onPlayBtnClick(song: Song)
+        fun onPlayBtnClick(album: Album)
     }
 
     private lateinit var mItemClickListener: MyItemClickListener // 전달받은 리스너 객체를 저장할 변수
@@ -24,7 +26,13 @@ class AlbumRVAdapter(private val albumList: ArrayList<Album>): RecyclerView.Adap
 
     override fun onBindViewHolder(holder: AlbumRVAdapter.ViewHolder, position: Int) {
         holder.bind(albumList[position])
+        // 전체 아이템 클릭 -> 화면 전환
         holder.itemView.setOnClickListener { mItemClickListener.onItemClick(albumList[position]) }
+        // 재생 버튼 클릭 -> 데이터 전달
+//        holder.binding.itemAlbumPlayIv.setOnClickListener { mItemClickListener.onPlayBtnClick(
+//            albumList[position].song?.get(0) ?: Song()
+//        ) }
+        holder.binding.itemAlbumPlayIv.setOnClickListener { mItemClickListener.onPlayBtnClick(albumList[position]) }
     }
 
     override fun getItemCount(): Int = albumList.size

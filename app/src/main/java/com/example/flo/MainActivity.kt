@@ -10,7 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.example.flo.databinding.ActivityMainBinding
 import com.google.gson.Gson
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), AlbumClickListener {
 
     companion object { const val STRING_INTENT_KEY = "song_key" }
 
@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SongActivity::class.java)
             intent.putExtra("title", song.title)
             intent.putExtra("singer", song.singer)
+            intent.putExtra("coverImg", song.coverImg)
             intent.putExtra("second", song.second)
             intent.putExtra("playTime", song.playTime)
             intent.putExtra("isPlaying", song.isPlaying)
@@ -116,6 +117,22 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             false
+        }
+    }
+
+    override fun onAlbumReceived(data: Album) {
+        Log.e("MainActivity", "albumData: ${data}")
+        val songData = data.song?.get(0)
+
+        // 미니플레이어 뷰 업데이트
+        if (songData?.title != null) {
+            binding.mainMiniplayerTitleTv.text = songData.title
+            binding.mainMiniplayerSingerTv.text = songData.singer
+            // song 데이터 업데이트
+            song = songData
+        } else { // 수록곡 정보가 없으면 앨범 제목과 가수를 넣어줌
+            binding.mainMiniplayerTitleTv.text = data.title
+            binding.mainMiniplayerSingerTv.text = data.singer
         }
     }
 }

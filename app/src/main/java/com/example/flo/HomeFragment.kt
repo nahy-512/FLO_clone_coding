@@ -1,5 +1,6 @@
 package com.example.flo
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,11 +14,18 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.flo.databinding.FragmentHomeBinding
 import com.google.gson.Gson
 
+interface AlbumClickListener {
+    fun onAlbumReceived(data: Album)
+}
+
 class HomeFragment : Fragment() {
 
     lateinit var binding: FragmentHomeBinding
     private var albumDatas = ArrayList<Album>()
 
+    private var listner: AlbumClickListener? = null
+
+    // 현재 패널 뷰페이저 위치를 저장할 변수
     var currentPosition = 0
 
     // 핸들러 설정
@@ -41,14 +49,32 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is AlbumClickListener) {
+            listner = context
+        } else {
+            throw RuntimeException("$context must implement AlbumClickListener")
+        }
+    }
+
     private fun initAlbumRV() {
+        val lilac = Song("LILAC", "아이유 (IU)", R.drawable.img_album_exp2,0, 60, false, "music_lilac")
+        val flu = Song("flu", "아이유 (IU)", R.drawable.img_album_exp2,0, 60, false, "music_flu")
+        val butter = Song("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp,0, 60, false, "music_butter")
+        val next = Song("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3,0, 60, false, "music_next")
+        val bboom = Song("뿜뿜", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5,0, 60, false, "music_bboom")
+
         // 데이터 리스트 생성 더미 데이터
         albumDatas.apply {
-            add(Album("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp))
-            add(Album("LILAC", "아이유 (IU)", R.drawable.img_album_exp2))
-            add(Album("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3))
+            add(Album("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp, ArrayList<Song>().apply { add(butter) }))
+            add(Album("LILAC", "아이유 (IU)", R.drawable.img_album_exp2, ArrayList<Song>().apply {
+                add(lilac)
+                add(flu)
+            }))
+            add(Album("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3, ArrayList<Song>().apply { add(next) }))
             add(Album("Boy with Luv", "방탄소년단 (BTS)", R.drawable.img_album_exp4))
-            add(Album("BBoom BBoom", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5))
+            add(Album("BBoom BBoom", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5, ArrayList<Song>().apply { add(bboom) }))
             add(Album("Weekend", "태연 (Tae Yeon)", R.drawable.img_album_exp6))
         }
 
@@ -61,9 +87,15 @@ class HomeFragment : Fragment() {
 
         /* 아이템 클릭 이벤트 */
         albumRVAdapter.setMyItemClickListener(object : AlbumRVAdapter.MyItemClickListener {
+            // 아이템 전체 클릭
             override fun onItemClick(album: Album) {
                 // 앨범 프레그먼트로 전환
                 moveToAlbumFragment(album)
+            }
+            // 아이템 재생 버튼 클릭
+            override fun onPlayBtnClick(album: Album) {
+                // 메인 액티비티로 재생할 앨범 데이터를 전달
+                listner?.onAlbumReceived(album)
             }
         })
     }
