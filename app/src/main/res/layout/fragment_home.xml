@@ -140,8 +140,11 @@
             android:layout_width="match_parent"
             android:layout_height="210dp"
             android:layout_marginTop="10dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="5dp"
             android:orientation="horizontal"
             android:scrollbars="none"
+            android:clipToPadding="false"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/home_today_music_ll"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -201,8 +204,7 @@
                         android:layout_marginTop="5dp"
                         android:text="제목"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="18sp"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -226,8 +228,7 @@
                         android:layout_marginTop="5dp"
                         android:text="제목"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="18sp"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -253,8 +254,7 @@
                         android:layout_marginTop="5dp"
                         android:text="제목"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="18sp"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -317,8 +317,7 @@
                         android:layout_marginTop="5dp"
                         android:text="제목"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="18sp"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -352,8 +351,7 @@
                         android:layout_marginTop="5dp"
                         android:text="제목"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textSize="18sp"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
