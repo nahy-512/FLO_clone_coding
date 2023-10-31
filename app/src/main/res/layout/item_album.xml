@@ -23,10 +23,11 @@
 
     <ImageView
         android:id="@+id/item_album_play_iv"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
+        android:padding="3dp"
         android:src="@drawable/widget_black_play"
         app:layout_constraintBottom_toBottomOf="@id/item_album_cover_img_cv"
         app:layout_constraintEnd_toEndOf="@id/item_album_cover_img_cv"/>

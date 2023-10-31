@@ -115,6 +115,7 @@ class SongActivity : AppCompatActivity() {
         with (binding) {
             songTitleTv.text = intent.getStringExtra("title")
             songSingerTv.text = intent.getStringExtra("singer")
+            songCoverImgIv.setImageResource(intent.getIntExtra("coverImg", 0))
             songPlayStartTimeTv.text = String.format("%02d:%02d", song.second / 60, song.second % 60)
             songPlayEndTimeTv.text = String.format("%02d:%02d", song.playTime / 60, song.playTime % 60)
             // 이전 재생 시간 반영
