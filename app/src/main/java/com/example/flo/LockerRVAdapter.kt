@@ -6,12 +6,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.flo.databinding.ItemLockerBinding
 
 class LockerRVAdapter(private val songList: ArrayList<Song>): RecyclerView.Adapter<LockerRVAdapter.ViewHolder>() {
-
     interface MyItemClickListener {
         fun onRemoveSong(position: Int) // 삭제 진행
+        fun onChangePlayState(position: Int) // 정지 or 재생 버튼
     }
 
-    private lateinit var mItemClickListener: LockerRVAdapter.MyItemClickListener
+    private lateinit var mItemClickListener: MyItemClickListener
+
+    // 아이템의 재생 상태를 저장하는 리스트
+    private var songStatusList = MutableList<Boolean>(songList.size) { false }
+
 
     fun setMyItemClickListener(itemClickListener: MyItemClickListener) {
         mItemClickListener = itemClickListener
@@ -19,6 +23,7 @@ class LockerRVAdapter(private val songList: ArrayList<Song>): RecyclerView.Adapt
 
     fun removeItem(position: Int) {
         songList.removeAt(position)
+        songStatusList.removeAt(position)
         notifyDataSetChanged()
 //        notifyItemRemoved(position)
 //        notifyItemRangeRemoved(position, songList.size)
@@ -32,10 +37,40 @@ class LockerRVAdapter(private val songList: ArrayList<Song>): RecyclerView.Adapt
 
     override fun onBindViewHolder(holder: LockerRVAdapter.ViewHolder, position: Int) {
         holder.bind(songList[position])
-        holder.binding.itemLockerMoreIv.setOnClickListener { mItemClickListener.onRemoveSong(position) }
+
+        holder.apply {
+            // 재생 버튼 클릭 -> 정지 버튼으로 바꾸기
+            binding.itemLockerPlayIv.setOnClickListener {
+                val isPlaying = songStatusList[position]
+                // 클릭한 아이템 상태 변경
+                songStatusList[position] = !isPlaying
+                if (isPlaying) {
+                    binding.itemLockerPlayIv.setImageResource(R.drawable.btn_miniplayer_play)
+                } else {
+                    binding.itemLockerPlayIv.setImageResource(R.drawable.btn_miniplay_pause)
+                }
+                mItemClickListener.onChangePlayState(position)
+            }
+
+            // 더보기 버튼 클릭 -> 삭제 진행
+            binding.itemLockerMoreIv.setOnClickListener { mItemClickListener.onRemoveSong(position) }
+
+            // 재생 버튼 상태 설정
+            val isPlaying = songStatusList[position]
+            if (isPlaying) {
+                binding.itemLockerPlayIv.setImageResource(R.drawable.btn_miniplay_pause)
+            } else {
+                binding.itemLockerPlayIv.setImageResource(R.drawable.btn_miniplayer_play)
+            }
+        }
     }
 
     override fun getItemCount(): Int = songList.size
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
 
     inner class ViewHolder(val binding: ItemLockerBinding): RecyclerView.ViewHolder(binding.root) {
 
@@ -45,5 +80,4 @@ class LockerRVAdapter(private val songList: ArrayList<Song>): RecyclerView.Adapt
             song.coverImg?.let { binding.itemLockerCoverImgIv.setImageResource(it) }
         }
     }
-
 }

@@ -48,6 +48,10 @@ class LockerSaveFragment: Fragment() {
             override fun onRemoveSong(position: Int) {
                lockerRVAdapter.removeItem(position)
             }
+
+            override fun onChangePlayState(position: Int) {
+                //
+            }
         })
     }
 }
