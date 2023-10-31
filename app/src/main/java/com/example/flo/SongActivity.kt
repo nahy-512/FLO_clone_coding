@@ -92,6 +92,7 @@ class SongActivity : AppCompatActivity() {
             song = Song(
                 intent.getStringExtra("title")!!,
                 intent.getStringExtra("singer")!!,
+                intent.getIntExtra("coverImg", 0),
                 intent.getIntExtra("second", 0),
                 intent.getIntExtra("playTime", 60),
                 intent.getBooleanExtra("isPlaying", false),

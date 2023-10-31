@@ -35,7 +35,6 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         initAlbumRV()
-
         setPanelAdapter()
         setBannerAdapter()
 
@@ -46,10 +45,10 @@ class HomeFragment : Fragment() {
         // 데이터 리스트 생성 더미 데이터
         albumDatas.apply {
             add(Album("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp))
-            add(Album("Lilac", "아이유 (IU)", R.drawable.img_album_exp2))
+            add(Album("LILAC", "아이유 (IU)", R.drawable.img_album_exp2))
             add(Album("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3))
             add(Album("Boy with Luv", "방탄소년단 (BTS)", R.drawable.img_album_exp4))
-            add(Album("BB0om BBoom", "모모랜드 (MOMOLANS)", R.drawable.img_album_exp5))
+            add(Album("BBoom BBoom", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5))
             add(Album("Weekend", "태연 (Tae Yeon)", R.drawable.img_album_exp6))
         }
 

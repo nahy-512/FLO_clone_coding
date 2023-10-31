@@ -52,7 +52,7 @@
                 android:id="@+id/main_miniplayer_title_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="13sp"
+                android:textSize="14sp"
                 android:hint="라일락"
                 android:textColor="@color/black" />
 
