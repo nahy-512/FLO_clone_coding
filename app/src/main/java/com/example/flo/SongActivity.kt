@@ -39,7 +39,6 @@ class SongActivity : AppCompatActivity() {
 
         // song 정보로 UI 업데이트
         setPlayer(song)
-//        song?.let { setPlayer(it) }
         onClickListener()
     }
 
@@ -161,19 +160,21 @@ class SongActivity : AppCompatActivity() {
         timer?.isPlaying = isPlaying
 
         if (isPlaying) { // 재생 상태
-            serviceStart(binding.songPlayerPlayIv)
             binding.songPlayerPlayIv.visibility = View.GONE
             binding.songPlayerPauseIv.visibility = View.VISIBLE
             // 음악 재생
             mediaPlayer?.start()
+            // 알림창 띄우기
+            serviceStart(binding.songPlayerPlayIv)
         } else { // 정지 상태
-//            serviceStop(binding.songPlayerPauseIv)
             binding.songPlayerPlayIv.visibility = View.VISIBLE
             binding.songPlayerPauseIv.visibility = View.GONE
             if (mediaPlayer?.isPlaying == true) { // 음악 재생 중일 떄
                 // 음악 중지
                 mediaPlayer?.pause()
             }
+            // 알림창 내리기
+//            serviceStop(binding.songPlayerPauseIv)
         }
     }
 
