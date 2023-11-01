@@ -7,12 +7,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.flo.databinding.ActivitySongBinding
 import com.google.gson.Gson
 
 class SongActivity : AppCompatActivity() {
 
     lateinit var binding: ActivitySongBinding
+
     lateinit var song: Song
     private var timer: Timer? = null
     private var mediaPlayer: MediaPlayer? = null
@@ -37,6 +39,7 @@ class SongActivity : AppCompatActivity() {
 
         // song 정보로 UI 업데이트
         setPlayer(song)
+//        song?.let { setPlayer(it) }
         onClickListener()
     }
 
@@ -87,6 +90,16 @@ class SongActivity : AppCompatActivity() {
         }
     }
 
+    fun serviceStart(view: View) {
+        val intent = Intent(this, Foreground::class.java)
+        ContextCompat.startForegroundService(this, intent)
+    }
+
+    fun serviceStop(view: View) {
+        val intent = Intent(this, Foreground::class.java)
+        stopService(intent)
+    }
+
     private fun initSong() {
         if (intent.hasExtra("title") && intent.hasExtra("singer")) {
             song = Song(
@@ -98,6 +111,15 @@ class SongActivity : AppCompatActivity() {
                 intent.getBooleanExtra("isPlaying", false),
                 intent.getStringExtra("music")!!
             )
+        } else {
+            val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
+            val songJson = sharedPreferences.getString("songData", null)
+
+            song = if (songJson == null) { // 데이터가 존재하지 않으면 Song 데이터를 직접 넣어줌
+                Song("라일락", "아이유(IU)", R.drawable.img_album_exp2,0, 60, false, "music_lilac")
+            } else { // 존재하면 저장된 데이터를 넣어줌
+                gson.fromJson(songJson, Song::class.java)
+            }
         }
     }
 
@@ -113,9 +135,9 @@ class SongActivity : AppCompatActivity() {
 
         // 위젯 반영
         with (binding) {
-            songTitleTv.text = intent.getStringExtra("title")
-            songSingerTv.text = intent.getStringExtra("singer")
-            songCoverImgIv.setImageResource(intent.getIntExtra("coverImg", 0))
+            songTitleTv.text = song.title
+            songSingerTv.text = song.singer
+            song.coverImg?.let { songCoverImgIv.setImageResource(it) }
             songPlayStartTimeTv.text = String.format("%02d:%02d", song.second / 60, song.second % 60)
             songPlayEndTimeTv.text = String.format("%02d:%02d", song.playTime / 60, song.playTime % 60)
             // 이전 재생 시간 반영
@@ -139,11 +161,13 @@ class SongActivity : AppCompatActivity() {
         timer?.isPlaying = isPlaying
 
         if (isPlaying) { // 재생 상태
+            serviceStart(binding.songPlayerPlayIv)
             binding.songPlayerPlayIv.visibility = View.GONE
             binding.songPlayerPauseIv.visibility = View.VISIBLE
             // 음악 재생
             mediaPlayer?.start()
         } else { // 정지 상태
+//            serviceStop(binding.songPlayerPauseIv)
             binding.songPlayerPlayIv.visibility = View.VISIBLE
             binding.songPlayerPauseIv.visibility = View.GONE
             if (mediaPlayer?.isPlaying == true) { // 음악 재생 중일 떄
@@ -182,8 +206,8 @@ class SongActivity : AppCompatActivity() {
         song.isPlaying = isPlaying
         runOnUiThread {
             setPlayerStatus(isPlaying)
-            binding.songPlayProgressSb.progress = song.second
-            binding.songPlayStartTimeTv.text = String.format("%02d:%02d", song.second / 60, song.second % 60)
+            binding.songPlayProgressSb.progress = song?.second ?: 0
+            binding.songPlayStartTimeTv.text = String.format("%02d:%02d", song.second.div(60), song.second.rem(60))
             setPlayer(song)
         }
         // 스레드 종료
