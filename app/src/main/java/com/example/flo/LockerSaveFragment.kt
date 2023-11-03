@@ -25,7 +25,7 @@ class LockerSaveFragment: Fragment() {
         return binding.root
     }
 
-    private fun initSongRv() {
+    private fun addSongDummy() {
         songDatas.apply {
             add(Song("LILAC", "아이유 (IU)", R.drawable.img_album_exp2,0, 60, false, "music_lilac"))
             add(Song("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3,0, 60, false, "music_next"))
@@ -39,6 +39,11 @@ class LockerSaveFragment: Fragment() {
             add(Song("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp,0, 60, false, "music_butter"))
             add(Song("TOMBOY", "(여자)아이들", R.drawable.img_album_exp8,0, 60, false, "music_tomboy"))
         }
+    }
+
+    private fun initSongRv() {
+        // 더미데이터 생성
+        addSongDummy()
 
         val lockerRVAdapter = LockerRVAdapter(songDatas)
         binding.lockerSaveSongRv.adapter = lockerRVAdapter

@@ -58,12 +58,15 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun initAlbumRV() {
+    private fun addAlbumDummy() {
         val lilac = Song("LILAC", "아이유 (IU)", R.drawable.img_album_exp2,0, 60, false, "music_lilac")
         val flu = Song("flu", "아이유 (IU)", R.drawable.img_album_exp2,0, 60, false, "music_flu")
         val butter = Song("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp,0, 60, false, "music_butter")
         val next = Song("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3,0, 60, false, "music_next")
         val bboom = Song("뿜뿜", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5,0, 60, false, "music_bboom")
+        val tomboy = Song("TOMBOY", "(여자) 아이들", R.drawable.img_album_exp8,0, 60, false, "music_tomboy")
+        val blueming = Song("Blueming", "아이유 (IU)", R.drawable.img_album_exp10,0, 60, false, "music_blueming")
+        val moon = Song("달", "악뮤 (AKMU)", R.drawable.img_album_exp7,0, 60, false, "music_moon")
 
         // 데이터 리스트 생성 더미 데이터
         albumDatas.apply {
@@ -73,10 +76,18 @@ class HomeFragment : Fragment() {
                 add(flu)
             }))
             add(Album("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3, ArrayList<Song>().apply { add(next) }))
+            add(Album("항해", "악뮤 (AKMU)", R.drawable.img_album_exp7, ArrayList<Song>().apply { add(moon) }))
+            add(Album("I NEVER DIE", "(여자) 아이들", R.drawable.img_album_exp8, ArrayList<Song>().apply { add(tomboy) }))
+            add(Album("Love Poem", "아이유 (IU)", R.drawable.img_album_exp10, ArrayList<Song>().apply { add(blueming) }))
             add(Album("Boy with Luv", "방탄소년단 (BTS)", R.drawable.img_album_exp4))
             add(Album("BBoom BBoom", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5, ArrayList<Song>().apply { add(bboom) }))
             add(Album("Weekend", "태연 (Tae Yeon)", R.drawable.img_album_exp6))
         }
+    }
+
+    private fun initAlbumRV() {
+        // 더미 데이터 생성
+        addAlbumDummy()
 
         // 어댑터와 데이터 리스트 연결
         val albumRVAdapter = AlbumRVAdapter(albumDatas)
@@ -127,7 +138,7 @@ class HomeFragment : Fragment() {
         // 인디케이터 세팅
         val indicator = binding.homePanelIndicator
         indicator.setViewPager(viewpager)
-        indicator.createIndicators(4,0)
+//        indicator.createIndicators(4,0)
         indicator.animatePageSelected(2)
 
         // 뷰페이저 넘기는 쓰레드
