@@ -122,6 +122,7 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
 
     override fun onAlbumReceived(data: Album) {
         Log.e("MainActivity", "albumData: ${data}")
+        // HomeFragment에서 클릭한 오늘 발매 음악의 첫 번째 수록곡 정보를 받아옴
         val songData = data.song?.get(0)
 
         // 미니플레이어 뷰 업데이트
@@ -133,6 +134,10 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
         } else { // 수록곡 정보가 없으면 앨범 제목과 가수를 넣어줌
             binding.mainMiniplayerTitleTv.text = data.title
             binding.mainMiniplayerSingerTv.text = data.singer
+            // song 제목, 가수, 이미지 업데이트
+            song.title = data.title.toString()
+            song.singer = data.singer.toString()
+            song.coverImg = data.coverImg
         }
     }
 }

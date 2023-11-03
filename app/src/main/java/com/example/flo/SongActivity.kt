@@ -45,20 +45,17 @@ class SongActivity : AppCompatActivity() {
     // 사용자가 포커스를 잃었을 때 음악이 중지
     override fun onPause() {
         super.onPause()
-        setPlayerStatus(false)
-        song.second = ((binding.songPlayProgressSb.progress * song.playTime)/100)/1000 // 재생 시간을 초 단위로 변환
-//        Log.d("onPause()", "현재 재생 시간: ${song.second}")
 
-        // 어플이 종료해도 데이터가 남아있을 수 있도록 내부 저장소에 저장
-        val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
-        val editor = sharedPreferences.edit() // 에디터
-        val songJson = gson.toJson(song)
-        editor.putString("songData", songJson)
-        editor.apply()
+        // 음악 재생 중지
+        setPlayerStatus(false)
+        // 곡 재생 정보 저장
+        savePlayingData()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+
+        /* 스레드 종료 및 리소스 해제 */
         timer?.interrupt()
         mediaPlayer?.release() // 미디어플레이어가 가지고 있던 리소스 해제
         mediaPlayer = null // 미디어 플레이어 해제
@@ -87,6 +84,18 @@ class SongActivity : AppCompatActivity() {
         binding.songPlayerRandomIv.setOnClickListener {
             setRandomStatus(!isRandom)
         }
+    }
+
+    private fun savePlayingData() {
+        song.second = ((binding.songPlayProgressSb.progress * song.playTime)/100)/1000 // 재생 시간을 초 단위로 변환
+//        Log.d("onPause()", "현재 재생 시간: ${song.second}")
+
+        // 어플이 종료해도 데이터가 남아있을 수 있도록 내부 저장소에 저장
+        val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
+        val editor = sharedPreferences.edit() // 에디터
+        val songJson = gson.toJson(song)
+        editor.putString("songData", songJson)
+        editor.apply()
     }
 
     fun serviceStart(view: View) {
@@ -150,7 +159,7 @@ class SongActivity : AppCompatActivity() {
 
     private fun sendAlbumTitle() {
         val intent = Intent(this, MainActivity::class.java).apply {
-            putExtra(MainActivity.STRING_INTENT_KEY, binding.songTitleTv.text)
+            putExtra(MainActivity.STRING_INTENT_KEY, "${binding.songTitleTv.text}_${binding.songSingerTv.text}")
         }
         setResult(Activity.RESULT_OK, intent)
     }
@@ -207,7 +216,7 @@ class SongActivity : AppCompatActivity() {
         song.isPlaying = isPlaying
         runOnUiThread {
             setPlayerStatus(isPlaying)
-            binding.songPlayProgressSb.progress = song?.second ?: 0
+            binding.songPlayProgressSb.progress = song.second
             binding.songPlayStartTimeTv.text = String.format("%02d:%02d", song.second.div(60), song.second.rem(60))
             setPlayer(song)
         }
