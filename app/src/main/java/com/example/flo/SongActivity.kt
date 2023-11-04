@@ -211,6 +211,10 @@ class SongActivity : AppCompatActivity() {
     }
 
     private fun initializeMusic(isPlaying: Boolean) {
+        // 리소스 해제
+        timer?.interrupt()
+        mediaPlayer?.release() // 미디어플레이어가 가지고 있던 리소스 해제
+        mediaPlayer = null // 미디어 플레이어 해제
         // 재생 시간 초기화
         song.second  = 0
         song.isPlaying = isPlaying
