@@ -35,20 +35,33 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        inputDummySongs()
         moveToSongActivity()
         initBottomNavigation()
     }
 
     override fun onStart() {
         super.onStart()
-        val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
-        val songJson = sharedPreferences.getString("songData", null)
+//        val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
+//        val songJson = sharedPreferences.getString("songData", null)
+//
+//        song = if (songJson == null) { // 데이터가 존재하지 않으면 Song 데이터를 직접 넣어줌
+//            Song("라일락", "아이유(IU)", R.drawable.img_album_exp2,0, 60, false, "music_lilac")
+//        } else { // 존재하면 저장된 데이터를 넣어줌
+//            gson.fromJson(songJson, Song::class.java)
+//        }
+        val spf = getSharedPreferences("song", MODE_PRIVATE)
+        val songId = spf.getInt("songId", 0)
 
-        song = if (songJson == null) { // 데이터가 존재하지 않으면 Song 데이터를 직접 넣어줌
-            Song("라일락", "아이유(IU)", R.drawable.img_album_exp2,0, 60, false, "music_lilac")
-        } else { // 존재하면 저장된 데이터를 넣어줌
-            gson.fromJson(songJson, Song::class.java)
+        val songDB = SongDatabase.getInstance(this)!!
+
+        song = if (songId == 0) { // 저장된 id 값이 없다면 첫 번째 곡 정보를 넣어줌
+            songDB.songDao().getSong(1)
+        } else { // 아니라면 저장된 songId를 통해 곡 정보를 가져옴
+            songDB.songDao().getSong(songId)
         }
+
+        Log.d("song ID", song.id.toString())
 
         // 미니플레이어에 데이터 반영
         setMiniPlayer(song)
@@ -67,17 +80,12 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
         Log.d("Song", song.title + song.singer)
 
         binding.mainPlayerCl.setOnClickListener {
+            // songId로 데이터를 넘겨줌
+            val editor = getSharedPreferences("song", MODE_PRIVATE).edit()
+            editor.putInt("songId", song.id).apply()
+
             val intent = Intent(this, SongActivity::class.java)
-            intent.putExtra("title", song.title)
-            intent.putExtra("singer", song.singer)
-            intent.putExtra("coverImg", song.coverImg)
-            intent.putExtra("second", song.second)
-            intent.putExtra("playTime", song.playTime)
-            intent.putExtra("isPlaying", song.isPlaying)
-            intent.putExtra("music", song.music)
-//            startActivity(intent)
-            // SongActivity에서 돌아올 때 받은 앨범 제목
-            getResultText.launch(intent)
+            startActivity(intent)
         }
     }
 
@@ -139,5 +147,53 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
             song.singer = data.singer.toString()
             song.coverImg = data.coverImg
         }
+    }
+
+    private fun inputDummySongs() {
+        // songDB의 인스턴스를 받아줌
+        val songDB = SongDatabase.getInstance(this)!!
+        val songs = songDB.songDao().getSongs()
+
+        // 저장된 songs 데이터가 있다면 바로 리턴
+        if (songs.isNotEmpty()) return
+
+        // songs가 비어있다면 더미데이터를 넣어줌
+        songDB.songDao().insert(
+            Song("LILAC", "아이유 (IU)", R.drawable.img_album_exp2,0, 60, false, "music_lilac", false)
+        )
+        songDB.songDao().insert(
+            Song("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3,0, 60, false, "music_next", false)
+        )
+        songDB.songDao().insert(
+            Song("달", "악뮤 (AKMU)", R.drawable.img_album_exp7,0, 60, false, "music_moon", false)
+        )
+        songDB.songDao().insert(
+            Song("Blueming", "아이유 (IU)", R.drawable.img_album_exp10,0, 60, false, "music_blueming", false)
+        )
+        songDB.songDao().insert(
+            Song("flu", "아이유 (IU)", R.drawable.img_album_exp2,0, 60, false, "music_flu", false)
+        )
+        songDB.songDao().insert(
+            Song("작은 것들을 위한 시", "방탄소년단 (BTS)", R.drawable.img_album_exp4,0, 60, false, "music_butter")
+        )
+        songDB.songDao().insert(
+            Song("Island", "위너 (WINNER)", R.drawable.img_album_exp9,0, 60, false, "music_island")
+        )
+        songDB.songDao().insert(
+            Song("TOMBOY", "(여자)아이들", R.drawable.img_album_exp8,0, 60, false, "music_tomboy")
+        )
+        songDB.songDao().insert(
+            Song("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp,0, 60, false, "music_butter")
+        )
+        songDB.songDao().insert(
+            Song("Weekend", "태연 (Tae Yeon)", R.drawable.img_album_exp6,0, 60, false, "music_lilac")
+        )
+        songDB.songDao().insert(
+            Song("뿜뿜", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5,0, 60, false, "music_bboom")
+        )
+
+        // 데이터가 잘 들어왔는지 확인
+        val _songs = songDB.songDao().getSongs()
+        Log.d("DB data", _songs.toString())
     }
 }
