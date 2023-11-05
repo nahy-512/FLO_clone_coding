@@ -18,7 +18,7 @@ class SongActivity : AppCompatActivity() {
 
     private var timer: Timer? = null
     private var mediaPlayer: MediaPlayer? = null
-    private var gson: Gson = Gson()
+//    private var gson: Gson = Gson()
 
     val songs = arrayListOf<Song>()
     lateinit var songDB: SongDatabase
@@ -91,6 +91,11 @@ class SongActivity : AppCompatActivity() {
         binding.songPlayerRandomIv.setOnClickListener {
             setRandomStatus(!isRandom)
         }
+
+        /* 좋아요 버튼 */
+        binding.songLikeIv.setOnClickListener {
+            setLike(songs[nowPos].isLike)
+        }
     }
 
     private fun initPlayList() {
@@ -132,6 +137,18 @@ class SongActivity : AppCompatActivity() {
 
         // song 정보로 UI 업데이트
         setPlayer(songs[nowPos])
+    }
+
+    private fun setLike(isLike: Boolean) {
+        songs[nowPos].isLike = !isLike
+        // DB의 값 업데이트
+        songDB.songDao().updateIsLikeById(!isLike, songs[nowPos].id)
+        // 뷰 랜더링
+        if (songs[nowPos].isLike) {
+            binding.songLikeIv.setImageResource(R.drawable.ic_my_like_on)
+        } else {
+            binding.songLikeIv.setImageResource(R.drawable.ic_my_like_off)
+        }
     }
 
     private fun moveSong(direct: Int) {
@@ -179,6 +196,12 @@ class SongActivity : AppCompatActivity() {
             // 이전 재생 시간 반영
             mediaPlayer?.seekTo(song.second * 1000)
             songPlayProgressSb.progress = song.second * 100000 / song.playTime
+            // 좋아요
+            if (song.isLike) {
+                binding.songLikeIv.setImageResource(R.drawable.ic_my_like_on)
+            } else {
+                binding.songLikeIv.setImageResource(R.drawable.ic_my_like_off)
+            }
         }
 
         // 타이머 시작
