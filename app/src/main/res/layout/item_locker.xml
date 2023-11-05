@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="12dp"
-    android:layout_marginHorizontal="10dp">
+    android:padding="12dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/item_locker_cover_img_cv"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginStart="10dp"
         app:cardCornerRadius="7dp"
         app:cardElevation="0dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,14 +58,15 @@
 
         <ImageView
             android:id="@+id/item_locker_play_iv"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="5dp"
             android:src="@drawable/btn_miniplayer_play"/>
 
         <ImageView
             android:id="@+id/item_locker_more_iv"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="25dp"
+            android:layout_height="35dp"
             android:src="@drawable/btn_player_more"/>
     </LinearLayout>
 

@@ -9,8 +9,8 @@ class LockerVPAdapter(fragment: Fragment): FragmentStateAdapter(fragment) {
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> LockerSaveFragment() // 저장한 곡
-            else -> LockerMusicFragment() // 음악파일
+            0 -> SavedSongFragment() // 저장한 곡
+            else -> MusicFileFragment() // 음악파일
         }
     }
 }
