@@ -4,15 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flo.databinding.FragmentLockerSaveBinding
 
-class SavedSongFragment: Fragment() {
+class SavedSongFragment: Fragment(), EditBarDialogInterface {
 
     lateinit var binding : FragmentLockerSaveBinding
 
     lateinit var songDB: SongDatabase
+
+    private lateinit var songRVAdapter: SavedSongRVAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -20,6 +24,8 @@ class SavedSongFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLockerSaveBinding.inflate(inflater, container, false)
+
+        initClickListener()
 
         return binding.root
     }
@@ -30,11 +36,35 @@ class SavedSongFragment: Fragment() {
         initSongRv()
     }
 
+    private fun initClickListener() {
+        /* 전제 선택 버튼 */
+        binding.lockerSaveSelectAllLayout.setOnClickListener {
+            // 선택 표시
+            changeSelectWidget(true)
+            // 바텀시트 띄우기
+            showBottomSheetDialog()
+        }
+    }
+
+    private fun changeSelectWidget(isSelected: Boolean) {
+        with(binding) {
+            if (isSelected) {
+                lockerSaveSelectAllTv.text = "선택해제"
+                lockerSaveSelectAllIv.setImageResource(R.drawable.btn_playlist_select_on)
+                lockerSaveSelectAllTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.select_color))
+            } else {
+                lockerSaveSelectAllTv.text = "전체선택"
+                lockerSaveSelectAllIv.setImageResource(R.drawable.btn_playlist_select_off)
+                lockerSaveSelectAllTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_gray_color))
+            }
+        }
+    }
+
     private fun initSongRv() {
 
         songDB = SongDatabase.getInstance(requireContext())!!
 
-        val songRVAdapter = SavedSongRVAdapter()
+        songRVAdapter = SavedSongRVAdapter()
         binding.lockerSaveSongRv.adapter = songRVAdapter
         binding.lockerSaveSongRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
@@ -48,5 +78,30 @@ class SavedSongFragment: Fragment() {
 //                songRVAdapter.removeItem(position)
             }
         })
+    }
+
+    private fun showBottomSheetDialog() {
+        //TODO: 다이얼로그 나올 때 미니플레이어 내려가게 하기
+        val dialog = EditbarDialog(this)
+        dialog.show(requireActivity().supportFragmentManager, dialog.tag)
+    }
+
+    private fun deleteAllSavedSongs() {
+        // 좋아요한 모든 곡의 isLike를 false로 업데이트
+        songDB.songDao().removeAllLikedSongs()
+        // 리사뷰에도 반영
+        songRVAdapter.deleteAllList()
+    }
+
+    override fun onClickButton(id: Int) {
+        // 선택 표시 해제
+        changeSelectWidget(false)
+        when (id) {
+            4 -> { // 삭제
+//                Toast.makeText(requireContext(),"삭제 버튼 클릭", Toast.LENGTH_SHORT).show()
+                // 저장한 곡 리스트 전체 삭제
+                deleteAllSavedSongs()
+            }
+        }
     }
 }
