@@ -226,7 +226,7 @@ class SongActivity : AppCompatActivity() {
             // 음악 재생
             mediaPlayer?.start()
             // 알림창 띄우기
-            serviceStart(binding.songPlayerPlayIv)
+//            serviceStart(binding.songPlayerPlayIv)
         } else { // 정지 상태
             binding.songPlayerPlayIv.visibility = View.VISIBLE
             binding.songPlayerPauseIv.visibility = View.GONE

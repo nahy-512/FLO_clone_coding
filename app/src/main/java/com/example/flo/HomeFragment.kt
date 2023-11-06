@@ -15,13 +15,15 @@ import com.example.flo.databinding.FragmentHomeBinding
 import com.google.gson.Gson
 
 interface AlbumClickListener {
-    fun onAlbumReceived(data: Album)
+    fun onAlbumReceived(albumIdx: Int)
 }
 
 class HomeFragment : Fragment() {
 
     lateinit var binding: FragmentHomeBinding
-    private var albumDatas = ArrayList<Album>()
+
+    private var albums = arrayListOf<Album>()
+    lateinit var albumDB: SongDatabase
 
     private var listner: AlbumClickListener? = null
 
@@ -42,6 +44,9 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
+        albumDB = SongDatabase.getInstance(requireContext())!!
+
+        inputDummyAlbums()
         initAlbumRV()
         setPanelAdapter()
         setBannerAdapter()
@@ -58,39 +63,52 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun addAlbumDummy() {
-        val lilac = Song("LILAC", "아이유 (IU)", R.drawable.img_album_exp2,0, 60, false, "music_lilac")
-        val flu = Song("flu", "아이유 (IU)", R.drawable.img_album_exp2,0, 60, false, "music_flu")
-        val butter = Song("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp,0, 60, false, "music_butter")
-        val next = Song("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3,0, 60, false, "music_next")
-        val bboom = Song("뿜뿜", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5,0, 60, false, "music_bboom")
-        val tomboy = Song("TOMBOY", "(여자) 아이들", R.drawable.img_album_exp8,0, 60, false, "music_tomboy")
-        val blueming = Song("Blueming", "아이유 (IU)", R.drawable.img_album_exp10,0, 60, false, "music_blueming")
-        val moon = Song("달", "악뮤 (AKMU)", R.drawable.img_album_exp7,0, 60, false, "music_moon")
+    private fun inputDummyAlbums() {
+        // DB로부터 album 데이터를 모두 조회해옴
+        albums = albumDB.albumDao().getAlbums() as ArrayList<Album>
 
-        // 데이터 리스트 생성 더미 데이터
-        albumDatas.apply {
-            add(Album("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp, ArrayList<Song>().apply { add(butter) }))
-            add(Album("LILAC", "아이유 (IU)", R.drawable.img_album_exp2, ArrayList<Song>().apply {
-                add(lilac)
-                add(flu)
-            }))
-            add(Album("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3, ArrayList<Song>().apply { add(next) }))
-            add(Album("항해", "악뮤 (AKMU)", R.drawable.img_album_exp7, ArrayList<Song>().apply { add(moon) }))
-            add(Album("I NEVER DIE", "(여자) 아이들", R.drawable.img_album_exp8, ArrayList<Song>().apply { add(tomboy) }))
-            add(Album("Love Poem", "아이유 (IU)", R.drawable.img_album_exp10, ArrayList<Song>().apply { add(blueming) }))
-            add(Album("Boy with Luv", "방탄소년단 (BTS)", R.drawable.img_album_exp4))
-            add(Album("BBoom BBoom", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5, ArrayList<Song>().apply { add(bboom) }))
-            add(Album("Weekend", "태연 (Tae Yeon)", R.drawable.img_album_exp6))
-        }
+        // 저장된 albums 데이터가 있다면 바로 리턴
+        if (albums.isNotEmpty()) return
+
+        // albums가 비어있다면 더미데이터를 넣어줌
+        albumDB.albumDao().insert(
+            Album("IU 5th Album 'LILAC'", "아이유 (IU)", R.drawable.img_album_exp2)
+        )
+        albumDB.albumDao().insert(
+            Album("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3)
+        )
+        albumDB.albumDao().insert(
+            Album("항해", "악뮤 (AKMU)", R.drawable.img_album_exp7)
+        )
+        albumDB.albumDao().insert(
+            Album("Love Poem", "아이유 (IU)", R.drawable.img_album_exp10)
+        )
+        albumDB.albumDao().insert(
+            Album("Map of the Soul", "방탄소년단 (BTS)", R.drawable.img_album_exp4)
+        )
+        albumDB.albumDao().insert(
+            Album("OUR TWENTY FOR", "위너 (WINNER)", R.drawable.img_album_exp9)
+        )
+        albumDB.albumDao().insert(
+            Album("I NEVER DIE", "(여자) 아이들", R.drawable.img_album_exp8)
+        )
+        albumDB.albumDao().insert(
+            Album("Map of the Soul", "방탄소년단 (BTS)", R.drawable.img_album_exp)
+        )
+        albumDB.albumDao().insert(
+            Album("Great!", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5)
+        )
+
+        // 데이터가 잘 들어왔는지 확인
+        val _albums = albumDB.albumDao().getAlbums()
+        Log.d("DB data", _albums.toString())
     }
 
+
     private fun initAlbumRV() {
-        // 더미 데이터 생성
-        addAlbumDummy()
 
         // 어댑터와 데이터 리스트 연결
-        val albumRVAdapter = AlbumRVAdapter(albumDatas)
+        val albumRVAdapter = AlbumRVAdapter(albums)
         // 리사이클러뷰에 어댑터 연결
         binding.homeTodayMusicAlbumRv.adapter = albumRVAdapter
         // 레이아웃 매니저 설정
@@ -104,9 +122,9 @@ class HomeFragment : Fragment() {
                 moveToAlbumFragment(album)
             }
             // 아이템 재생 버튼 클릭
-            override fun onPlayBtnClick(album: Album) {
+            override fun onPlayBtnClick(albumIdx: Int) {
                 // 메인 액티비티로 재생할 앨범 데이터를 전달
-                listner?.onAlbumReceived(album)
+                listner?.onAlbumReceived(albumIdx)
             }
         })
     }

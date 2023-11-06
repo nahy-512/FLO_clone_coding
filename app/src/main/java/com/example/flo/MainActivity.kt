@@ -269,26 +269,21 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
         }
     }
 
-    override fun onAlbumReceived(data: Album) {
-        Log.e("MainActivity", "albumData: ${data}")
-        // HomeFragment에서 클릭한 오늘 발매 음악의 첫 번째 수록곡 정보를 받아옴
-        val songData = data.song?.get(0)
+    override fun onAlbumReceived(albumIdx: Int) {
+        Log.e("MainActivity", "albumIdx: ${albumIdx}")
 
-        // 미니플레이어 뷰 업데이트
-        if (songData?.title != null) {
-            binding.mainMiniplayerTitleTv.text = songData.title
-            binding.mainMiniplayerSingerTv.text = songData.singer
-            // song 데이터 업데이트
-            //TODO: 아이디로 받아올 것. 첫 번쨰 수록곡으로 받아오므로 여기선 항상 nowPos 1부터 시작
-            songs[nowPos] = songData
-        } else { // 수록곡 정보가 없으면 앨범 제목과 가수를 넣어줌
-            binding.mainMiniplayerTitleTv.text = data.title
-            binding.mainMiniplayerSingerTv.text = data.singer
-            // song 제목, 가수, 이미지 업데이트
-            songs[nowPos].title = data.title.toString()
-            songs[nowPos].singer = data.singer.toString()
-            songs[nowPos].coverImg = data.coverImg
-        }
+        // HomeFragment에서 클릭한 오늘 발매 음악 앨범의 수록곡 정보를 DB에서 가져옴
+        val songsData = songDB.songDao().getSongsInAlbum(albumIdx)
+        // 이를 현재 재생 곡 정보에 넣어줌
+        nowPos = 1
+        songs[nowPos] = songsData[0]
+
+        // 미니플레이어 제목 가수 업데이트
+        binding.mainMiniplayerTitleTv.text = songsData[0].title
+        binding.mainMiniplayerSingerTv.text = songsData[0].singer
+
+        // 재생하던 음악 초기화 및 다시 재생
+        initializeMusic(true)
     }
 
     private fun inputDummySongs() {
@@ -299,37 +294,37 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
 
         // songs가 비어있다면 더미데이터를 넣어줌
         songDB.songDao().insert(
-            Song("LILAC", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_lilac", false)
+            Song("LILAC", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_lilac", false, 1)
         )
         songDB.songDao().insert(
-            Song("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3,0, 180, false, "music_next", false)
+            Song("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3,0, 180, false, "music_next", false, 2)
         )
         songDB.songDao().insert(
-            Song("달", "악뮤 (AKMU)", R.drawable.img_album_exp7,0, 180, false, "music_moon", false)
+            Song("달", "악뮤 (AKMU)", R.drawable.img_album_exp7,0, 180, false, "music_moon", false, 3)
         )
         songDB.songDao().insert(
-            Song("Blueming", "아이유 (IU)", R.drawable.img_album_exp10,0, 180, false, "music_blueming", false)
+            Song("Blueming", "아이유 (IU)", R.drawable.img_album_exp10,0, 180, false, "music_blueming", false, 4)
         )
         songDB.songDao().insert(
-            Song("flu", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false)
+            Song("flu", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false, 1)
         )
         songDB.songDao().insert(
-            Song("작은 것들을 위한 시", "방탄소년단 (BTS)", R.drawable.img_album_exp4,0, 180, false, "music_butter")
+            Song("작은 것들을 위한 시 (Boy With Luv)", "방탄소년단 (BTS)", R.drawable.img_album_exp4,0, 180, false, "music_butter", albumIdx = 5)
         )
         songDB.songDao().insert(
-            Song("Island", "위너 (WINNER)", R.drawable.img_album_exp9,0, 180, false, "music_island")
+            Song("Island", "위너 (WINNER)", R.drawable.img_album_exp9,0, 180, false, "music_island", albumIdx = 6)
         )
         songDB.songDao().insert(
-            Song("TOMBOY", "(여자)아이들", R.drawable.img_album_exp8,0, 180, false, "music_tomboy")
+            Song("TOMBOY", "(여자)아이들", R.drawable.img_album_exp8,0, 180, false, "music_tomboy", albumIdx = 7)
         )
         songDB.songDao().insert(
-            Song("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp,0, 180, false, "music_butter")
+            Song("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp,0, 180, false, "music_butter", albumIdx = 8)
         )
         songDB.songDao().insert(
-            Song("Weekend", "태연 (Tae Yeon)", R.drawable.img_album_exp6,0, 180, false, "music_lilac")
+            Song("Weekend", "태연 (Tae Yeon)", R.drawable.img_album_exp6,0, 180, false, "music_lilac", albumIdx = null)
         )
         songDB.songDao().insert(
-            Song("뿜뿜", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5,0, 180, false, "music_bboom")
+            Song("뿜뿜", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5,0, 180, false, "music_bboom", albumIdx = 9)
         )
 
         // 데이터가 잘 들어왔는지 확인
@@ -348,6 +343,7 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
                 // 타이머는 계속 진행되어야 함
                 while (true) {
                     if (second >= playTime) { // 노래 재생 시간이 다 끝나면 종료
+                        //TODO: 재생 시간 종료 시 동작 정의
 //                        when (repeatState) {
 //                            1 -> initializeMusic(true) // 한곡 재생 상태에서는 바로 초기화해서 다시 재생
 //                            else -> initializeMusic(false) // 그 이외의 경우에는 음악 재생 중지
