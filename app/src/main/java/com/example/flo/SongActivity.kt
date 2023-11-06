@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.flo.databinding.ActivitySongBinding
-import com.google.gson.Gson
 
 class SongActivity : AppCompatActivity() {
 
@@ -100,7 +99,7 @@ class SongActivity : AppCompatActivity() {
     private fun initPlayList() {
         // DB의 song 리스트를 뽑아서 songs에 저장
         songDB = SongDatabase.getInstance(this)!!
-        songs.addAll(songDB.songDao().getSongs())
+        songs.addAll(songDB.songDao().getAllSongs())
     }
 
     private fun savePlayingData() {
