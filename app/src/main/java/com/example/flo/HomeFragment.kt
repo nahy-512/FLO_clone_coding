@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.flo.databinding.FragmentHomeBinding
@@ -23,6 +24,7 @@ class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
 
     private var albums = arrayListOf<Album>()
+//    private var albums: LiveData<List<Album>>? = null
     lateinit var albumDB: SongDatabase
 
     private var listner: AlbumClickListener? = null
@@ -64,47 +66,51 @@ class HomeFragment : Fragment() {
     }
 
     private fun inputDummyAlbums() {
-        // DB로부터 album 데이터를 모두 조회해옴
-        albums = albumDB.albumDao().getAlbums() as ArrayList<Album>
+        // DB로부터 album 데이터를 모두 조회해옴 (LiveData 초기화)
+        albums = albumDB.albumDao().getAllAlbums() as ArrayList<Album>
 
-        // 저장된 albums 데이터가 있다면 바로 리턴
-        if (albums.isNotEmpty()) return
+        if (albums.isNotEmpty())
+            return
+        else {
+            // 앨범 데이터가 없을 때의 처리
+            Thread{
+                // albums가 비어있다면 더미데이터를 넣어줌
+                albumDB.albumDao().insert(
+                    Album("IU 5th Album 'LILAC'", "아이유 (IU)", R.drawable.img_album_exp2)
+                )
+                albumDB.albumDao().insert(
+                    Album("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3)
+                )
+                albumDB.albumDao().insert(
+                    Album("항해", "악뮤 (AKMU)", R.drawable.img_album_exp7)
+                )
+                albumDB.albumDao().insert(
+                    Album("Love Poem", "아이유 (IU)", R.drawable.img_album_exp10)
+                )
+                albumDB.albumDao().insert(
+                    Album("Map of the Soul", "방탄소년단 (BTS)", R.drawable.img_album_exp4)
+                )
+                albumDB.albumDao().insert(
+                    Album("OUR TWENTY FOR", "위너 (WINNER)", R.drawable.img_album_exp9)
+                )
+                albumDB.albumDao().insert(
+                    Album("I NEVER DIE", "(여자) 아이들", R.drawable.img_album_exp8)
+                )
+                albumDB.albumDao().insert(
+                    Album("Map of the Soul", "방탄소년단 (BTS)", R.drawable.img_album_exp)
+                )
+                albumDB.albumDao().insert(
+                    Album("Great!", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5)
+                )
 
-        // albums가 비어있다면 더미데이터를 넣어줌
-        albumDB.albumDao().insert(
-            Album("IU 5th Album 'LILAC'", "아이유 (IU)", R.drawable.img_album_exp2)
-        )
-        albumDB.albumDao().insert(
-            Album("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3)
-        )
-        albumDB.albumDao().insert(
-            Album("항해", "악뮤 (AKMU)", R.drawable.img_album_exp7)
-        )
-        albumDB.albumDao().insert(
-            Album("Love Poem", "아이유 (IU)", R.drawable.img_album_exp10)
-        )
-        albumDB.albumDao().insert(
-            Album("Map of the Soul", "방탄소년단 (BTS)", R.drawable.img_album_exp4)
-        )
-        albumDB.albumDao().insert(
-            Album("OUR TWENTY FOR", "위너 (WINNER)", R.drawable.img_album_exp9)
-        )
-        albumDB.albumDao().insert(
-            Album("I NEVER DIE", "(여자) 아이들", R.drawable.img_album_exp8)
-        )
-        albumDB.albumDao().insert(
-            Album("Map of the Soul", "방탄소년단 (BTS)", R.drawable.img_album_exp)
-        )
-        albumDB.albumDao().insert(
-            Album("Great!", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5)
-        )
+                // 다시 데이터를 넣어줌
+                albums = albumDB.albumDao().getAllAlbums() as ArrayList<Album>
 
-        // 다시 데이터를 넣어줌
-        albums = albumDB.albumDao().getAlbums() as ArrayList<Album>
-
-        // 데이터가 잘 들어왔는지 확인
-        val _albums = albumDB.albumDao().getAlbums()
-        Log.d("DB data", _albums.toString())
+                // 데이터가 잘 들어왔는지 확인
+                val _albums = albumDB.albumDao().getAlbumsLiveData()
+                Log.d("DB data", _albums.toString())
+            }.start()
+        }
     }
 
 
@@ -116,6 +122,12 @@ class HomeFragment : Fragment() {
         binding.homeTodayMusicAlbumRv.adapter = albumRVAdapter
         // 레이아웃 매니저 설정
         binding.homeTodayMusicAlbumRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+        albumDB.albumDao().getAlbumsLiveData().observe(viewLifecycleOwner, Observer { albums ->
+            if (albums.isNotEmpty()) {
+                albumRVAdapter.updateAlbums(albums)
+            }
+        })
 
         /* 아이템 클릭 이벤트 */
         albumRVAdapter.setMyItemClickListener(object : AlbumRVAdapter.MyItemClickListener {

@@ -2,6 +2,7 @@ package com.example.flo
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flo.databinding.ItemAlbumBinding
 
@@ -15,6 +16,12 @@ class AlbumRVAdapter(private val albumList: ArrayList<Album>): RecyclerView.Adap
     private lateinit var mItemClickListener: MyItemClickListener // 전달받은 리스너 객체를 저장할 변수
     fun setMyItemClickListener(itemClickListener: MyItemClickListener) { // 외부에서 전달받을 수 있는 함수
         mItemClickListener = itemClickListener
+    }
+
+    fun updateAlbums(newAlbums: List<Album>) {
+        albumList.clear()
+        albumList.addAll(newAlbums)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): AlbumRVAdapter.ViewHolder {

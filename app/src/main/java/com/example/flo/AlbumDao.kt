@@ -1,5 +1,6 @@
 package com.example.flo
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -19,5 +20,9 @@ interface AlbumDao {
 
     // 모든 album의 목록을 조회
     @Query("SELECT * FROM AlbumTable")
-    fun getAlbums(): List<Album>
+    fun getAllAlbums(): List<Album>
+
+    @Query("SELECT * FROM AlbumTable")
+    fun getAlbumsLiveData(): LiveData<List<Album>>
+
 }

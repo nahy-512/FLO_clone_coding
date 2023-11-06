@@ -19,7 +19,7 @@ interface SongDao {
 
     // 모든 song의 목록을 조회
     @Query("SELECT * FROM SongTable")
-    fun getSongs(): List<Song>
+    fun getAllSongs(): List<Song>
 
     // id를 기준으로 song 데이터를 조회
     @Query("SELECT * FROM SongTable WHERE id = :id")

@@ -10,7 +10,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.flo.databinding.ActivityMainBinding
-import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity(), AlbumClickListener {
 
@@ -305,62 +304,64 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
     private fun inputDummySongs() {
         albumIdx = getAlbumIdx()
         Log.d("MainActivity", "저장된 albumIdx: $albumIdx")
-        if (songDB.songDao().getSongs().isNotEmpty()) { // 저장된 songs 데이터가 있을 경우
+        if (songDB.songDao().getAllSongs().isNotEmpty()) { // 저장된 songs 데이터가 있을 경우
             if (songDB.songDao().getSongsInAlbum(albumIdx).isNotEmpty()) { // 앨범 id로 수록곡 정보 조회해보기
                 songs = songDB.songDao().getSongsInAlbum(albumIdx) as ArrayList<Song>
                 Log.d("MainActivity", "Songs: $songs")
             } else { // 수록곡 정보가 없다면 전체 곡을 songs에 추가
-                songs = songDB.songDao().getSongs() as ArrayList<Song>
+                songs = songDB.songDao().getAllSongs() as ArrayList<Song>
             }
             return
         }
         else { // songs가 비어있다면 더미데이터를 넣어줌
-            songDB.songDao().insert(
-                Song("LILAC", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_lilac", false, 1)
-            )
-            songDB.songDao().insert(
-                Song("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3,0, 180, false, "music_next", false, 2)
-            )
-            songDB.songDao().insert(
-                Song("달", "악뮤 (AKMU)", R.drawable.img_album_exp7,0, 180, false, "music_moon", false, 3)
-            )
-            songDB.songDao().insert(
-                Song("Blueming", "아이유 (IU)", R.drawable.img_album_exp10,0, 180, false, "music_blueming", false, 4)
-            )
-            songDB.songDao().insert(
-                Song("Flu", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false, 1)
-            )
-            songDB.songDao().insert(
-                Song("Coin", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_lilac", false, 1)
-            )
-            songDB.songDao().insert(
-                Song("봄 안녕", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false, 1)
-            )
-            songDB.songDao().insert(
-                Song("작은 것들을 위한 시 (Boy With Luv)", "방탄소년단 (BTS)", R.drawable.img_album_exp4,0, 180, false, "music_butter", albumIdx = 5)
-            )
-            songDB.songDao().insert(
-                Song("Island", "위너 (WINNER)", R.drawable.img_album_exp9,0, 180, false, "music_island", albumIdx = 6)
-            )
-            songDB.songDao().insert(
-                Song("TOMBOY", "(여자)아이들", R.drawable.img_album_exp8,0, 180, false, "music_tomboy", albumIdx = 7)
-            )
-            songDB.songDao().insert(
-                Song("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp,0, 180, false, "music_butter", albumIdx = 8)
-            )
-            songDB.songDao().insert(
-                Song("Weekend", "태연 (Tae Yeon)", R.drawable.img_album_exp6,0, 180, false, "music_lilac", albumIdx = null)
-            )
-            songDB.songDao().insert(
-                Song("뿜뿜", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5,0, 180, false, "music_bboom", albumIdx = 9)
-            )
+            Thread {
+                songDB.songDao().insert(
+                    Song("LILAC", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_lilac", false, 1)
+                )
+                songDB.songDao().insert(
+                    Song("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3,0, 180, false, "music_next", false, 2)
+                )
+                songDB.songDao().insert(
+                    Song("달", "악뮤 (AKMU)", R.drawable.img_album_exp7,0, 180, false, "music_moon", false, 3)
+                )
+                songDB.songDao().insert(
+                    Song("Blueming", "아이유 (IU)", R.drawable.img_album_exp10,0, 180, false, "music_blueming", false, 4)
+                )
+                songDB.songDao().insert(
+                    Song("Flu", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false, 1)
+                )
+                songDB.songDao().insert(
+                    Song("Coin", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_lilac", false, 1)
+                )
+                songDB.songDao().insert(
+                    Song("봄 안녕", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false, 1)
+                )
+                songDB.songDao().insert(
+                    Song("작은 것들을 위한 시 (Boy With Luv)", "방탄소년단 (BTS)", R.drawable.img_album_exp4,0, 180, false, "music_butter", albumIdx = 5)
+                )
+                songDB.songDao().insert(
+                    Song("Island", "위너 (WINNER)", R.drawable.img_album_exp9,0, 180, false, "music_island", albumIdx = 6)
+                )
+                songDB.songDao().insert(
+                    Song("TOMBOY", "(여자)아이들", R.drawable.img_album_exp8,0, 180, false, "music_tomboy", albumIdx = 7)
+                )
+                songDB.songDao().insert(
+                    Song("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp,0, 180, false, "music_butter", albumIdx = 8)
+                )
+                songDB.songDao().insert(
+                    Song("Weekend", "태연 (Tae Yeon)", R.drawable.img_album_exp6,0, 180, false, "music_lilac", albumIdx = null)
+                )
+                songDB.songDao().insert(
+                    Song("뿜뿜", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5,0, 180, false, "music_bboom", albumIdx = 9)
+                )
 
-            // 데이터가 잘 들어왔는지 확인
+                // 데이터가 잘 들어왔는지 확인
 //        val _songs = songDB.songDao().getSongs()
-            Log.d("DB data", songs.toString())
+                Log.d("DB data", songs.toString())
 
-            // song 정보를 다시 넣어줌
-            songs = songDB.songDao().getSongsInAlbum(1) as ArrayList<Song>
+                // song 정보를 다시 넣어줌
+                songs = songDB.songDao().getSongsInAlbum(1) as ArrayList<Song>
+            }.start()
         }
     }
 
