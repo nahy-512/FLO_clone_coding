@@ -25,6 +25,10 @@ interface SongDao {
     @Query("SELECT * FROM SongTable WHERE id = :id")
     fun getSong(id: Int): Song
 
+    // albumIdx로 수록곡 조회
+    @Query("SELECT * FROM SongTable WHERE albumIdx = :albumIdx")
+    fun getSongsInAlbum(albumIdx: Int): List<Song>
+
     // song의 좋아요 여부를 수정
     @Query("UPDATE SongTable SET isLike = :isLike WHERE id = :id")
     fun updateIsLikeById(isLike: Boolean, id: Int)
@@ -33,7 +37,7 @@ interface SongDao {
     @Query("SELECT * FROM SongTable WHERE isLike = :isLike")
     fun getLikedSongs(isLike: Boolean): List<Song>
 
-    // 곡 재생 시간 업데이트
+    // 곡 재생 상태 업데이트 (재생 시간 및 상태)
     @Query("UPDATE SongTable SET second = :second, isPlaying = :isPlaying WHERE id = :id")
     fun updatePlayingStateById(second: Int, isPlaying: Boolean, id: Int)
 }
