@@ -18,7 +18,6 @@ class SongActivity : AppCompatActivity() {
 
     private var timer: Timer? = null
     private var mediaPlayer: MediaPlayer? = null
-//    private var gson: Gson = Gson()
 
     val songs = arrayListOf<Song>()
     lateinit var songDB: SongDatabase
@@ -43,10 +42,10 @@ class SongActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
 
-        // 음악 재생 중지
-        setPlayerStatus(false)
         // 곡 재생 정보 저장
         savePlayingData()
+        // 음악 재생 중지
+        setPlayerStatus(false)
     }
 
     override fun onDestroy() {
@@ -106,10 +105,12 @@ class SongActivity : AppCompatActivity() {
 
     private fun savePlayingData() {
         //TODO: 노래 재생 시간 DB에 업데이트
-        songs[nowPos].second = ((binding.songPlayProgressSb.progress * songs[nowPos].playTime)/100)/1000 // 재생 시간을 초 단위로 변환
-//        Log.d("onPause()", "현재 재생 시간: ${song.second}")
+        val second = ((binding.songPlayProgressSb.progress * songs[nowPos].playTime)/100)/1000 // 재생 시간을 초 단위로 변환
+        // 곡 재생 정보 업데이트
+        songDB.songDao().updatePlayingStateById(second, songs[nowPos].isPlaying, songs[nowPos].id)
+        Log.d("onPause()", "현재 재생 시간: ${second}")
 
-        // 어플이 종료해도 데이터가 남아있을 수 있도록 내부 저장소에 저장
+        // 어플이 종료해도 데이터가 남아있을 수 있도록 마지막으로 재생한 곡의 id를 내부 저장소에 저장
         val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
         val editor = sharedPreferences.edit() // 에디터
         editor.putInt("songId", songs[nowPos].id)
@@ -183,6 +184,8 @@ class SongActivity : AppCompatActivity() {
         // 재생 버튼 및 음악 재생 상태 지정
         setPlayerStatus(song.isPlaying)
 
+        // 이전 재생 시간 반영
+        mediaPlayer?.seekTo(song.second * 1000)
         // 음악 종료 시간 설정
         song.playTime = mediaPlayer?.duration!! / 1000
 
@@ -193,8 +196,6 @@ class SongActivity : AppCompatActivity() {
             song.coverImg?.let { songCoverImgIv.setImageResource(it) }
             songPlayStartTimeTv.text = String.format("%02d:%02d", song.second / 60, song.second % 60)
             songPlayEndTimeTv.text = String.format("%02d:%02d", song.playTime / 60, song.playTime % 60)
-            // 이전 재생 시간 반영
-            mediaPlayer?.seekTo(song.second * 1000)
             songPlayProgressSb.progress = song.second * 100000 / song.playTime
             // 좋아요
             if (song.isLike) {
