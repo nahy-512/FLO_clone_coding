@@ -5,7 +5,9 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -146,8 +148,10 @@ class SongActivity : AppCompatActivity() {
         // 뷰 랜더링
         if (songs[nowPos].isLike) {
             binding.songLikeIv.setImageResource(R.drawable.ic_my_like_on)
+            showCustomToast("좋아요 한 곡에 담겼습니다.")
         } else {
             binding.songLikeIv.setImageResource(R.drawable.ic_my_like_off)
+            showCustomToast("좋아요 한 곡이 취소되었습니다.")
         }
     }
 
@@ -278,6 +282,17 @@ class SongActivity : AppCompatActivity() {
         }
         // 스레드 종료
         Thread.sleep(50)
+    }
+
+    private fun showCustomToast(message: String) {
+        val layoutInflater = LayoutInflater.from(this).inflate(R.layout.toast_board,null)
+        val text : TextView = layoutInflater.findViewById(R.id.textViewToast)
+        // 메시지 띄우기
+        text.text = message
+
+        val toast = Toast(this)
+        toast.view = layoutInflater
+        toast.show()
     }
 
     inner class Timer(private val playTime: Int, var isPlaying: Boolean = true): Thread() {
