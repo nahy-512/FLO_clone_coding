@@ -99,6 +99,9 @@ class HomeFragment : Fragment() {
             Album("Great!", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5)
         )
 
+        // 다시 데이터를 넣어줌
+        albums = albumDB.albumDao().getAlbums() as ArrayList<Album>
+
         // 데이터가 잘 들어왔는지 확인
         val _albums = albumDB.albumDao().getAlbums()
         Log.d("DB data", _albums.toString())

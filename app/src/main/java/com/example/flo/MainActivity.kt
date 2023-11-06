@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
     private var songs = arrayListOf<Song>()
     lateinit var songDB: SongDatabase
 
+    private var albumIdx: Int = 1
     var nowPos = 1
 
     private val getResultText = registerForActivityResult(
@@ -65,6 +66,7 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
         timer?.interrupt()
         Thread.sleep(50)
         // 곡 재생 정보 업데이트
+        savedId()
         updatePlayingData()
     }
 
@@ -87,12 +89,13 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
     }
 
     private fun initSong() {
+        // 저장된 songId를 가져옴
         val spf = getSharedPreferences("song", MODE_PRIVATE)
         val songId = spf.getInt("songId", 1)
+        Log.d("MainActivity", "저장된 songIdx: $songId")
 
         // 현재 곡 위치 계산하기
         nowPos = getPlayerSongPosition(songId)
-
         // 미니플레이어 및 미디어플레이어 설정
         setPlayer(songs[nowPos])
     }
@@ -142,6 +145,7 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
     }
 
     private fun setPlayer(song: Song) {
+        Log.d("MainActivity", "setPlayer - songId: ${song.id}")
         // 미니플레이어 뷰 랜더링
         setMiniPlayer(song)
 
@@ -200,10 +204,7 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
         Log.d("Song", songs[nowPos].title + songs[nowPos].singer)
 
         binding.mainPlayerCl.setOnClickListener {
-            // songId로 데이터를 넘겨줌
-            val editor = getSharedPreferences("song", MODE_PRIVATE).edit()
-            editor.putInt("songId", songs[nowPos].id).apply()
-
+            savedId()
             val intent = Intent(this, SongActivity::class.java)
             // SongActivity에서 돌아올 때 받은 앨범 제목
             getResultText.launch(intent)
@@ -228,6 +229,19 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
         binding.mainMiniplayerNextBtn.setOnClickListener {
             moveSong(+1)
         }
+    }
+
+    private fun savedId() {
+        // spf에 데이터를 저장함
+        getSharedPreferences("song", MODE_PRIVATE).edit()
+            .putInt("songId", songs[nowPos].id)
+            .putInt("albumId", albumIdx)
+            .apply()
+    }
+
+    private fun getAlbumIdx(): Int {
+        // spf에 저장된 albumIdx를 가져옴
+        return getSharedPreferences("song", MODE_PRIVATE).getInt("albumId", 1)
     }
 
     private fun initBottomNavigation(){
@@ -270,66 +284,84 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
     }
 
     override fun onAlbumReceived(albumIdx: Int) {
-        Log.e("MainActivity", "albumIdx: ${albumIdx}")
-
+        Log.e("MainActivity", "albumIdx: $albumIdx")
+        this.albumIdx = albumIdx
         // HomeFragment에서 클릭한 오늘 발매 음악 앨범의 수록곡 정보를 DB에서 가져옴
-        val songsData = songDB.songDao().getSongsInAlbum(albumIdx)
+        songs = songDB.songDao().getSongsInAlbum(albumIdx) as ArrayList<Song>
         // 이를 현재 재생 곡 정보에 넣어줌
-        nowPos = 1
-        songs[nowPos] = songsData[0]
+        nowPos = getPlayerSongPosition(songs[0].id)
+        songs[nowPos] = songs[0]
+        // id 정보 spf에 저장
+        savedId()
 
         // 미니플레이어 제목 가수 업데이트
-        binding.mainMiniplayerTitleTv.text = songsData[0].title
-        binding.mainMiniplayerSingerTv.text = songsData[0].singer
+        binding.mainMiniplayerTitleTv.text = songs[0].title
+        binding.mainMiniplayerSingerTv.text = songs[0].singer
 
         // 재생하던 음악 초기화 및 다시 재생
         initializeMusic(true)
     }
 
     private fun inputDummySongs() {
-        songs = songDB.songDao().getSongs() as ArrayList<Song>
+        albumIdx = getAlbumIdx()
+        Log.d("MainActivity", "저장된 albumIdx: $albumIdx")
+        if (songDB.songDao().getSongs().isNotEmpty()) { // 저장된 songs 데이터가 있을 경우
+            if (songDB.songDao().getSongsInAlbum(albumIdx).isNotEmpty()) { // 앨범 id로 수록곡 정보 조회해보기
+                songs = songDB.songDao().getSongsInAlbum(albumIdx) as ArrayList<Song>
+                Log.d("MainActivity", "Songs: $songs")
+            } else { // 수록곡 정보가 없다면 전체 곡을 songs에 추가
+                songs = songDB.songDao().getSongs() as ArrayList<Song>
+            }
+            return
+        }
+        else { // songs가 비어있다면 더미데이터를 넣어줌
+            songDB.songDao().insert(
+                Song("LILAC", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_lilac", false, 1)
+            )
+            songDB.songDao().insert(
+                Song("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3,0, 180, false, "music_next", false, 2)
+            )
+            songDB.songDao().insert(
+                Song("달", "악뮤 (AKMU)", R.drawable.img_album_exp7,0, 180, false, "music_moon", false, 3)
+            )
+            songDB.songDao().insert(
+                Song("Blueming", "아이유 (IU)", R.drawable.img_album_exp10,0, 180, false, "music_blueming", false, 4)
+            )
+            songDB.songDao().insert(
+                Song("Flu", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false, 1)
+            )
+            songDB.songDao().insert(
+                Song("Coin", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_lilac", false, 1)
+            )
+            songDB.songDao().insert(
+                Song("봄 안녕", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false, 1)
+            )
+            songDB.songDao().insert(
+                Song("작은 것들을 위한 시 (Boy With Luv)", "방탄소년단 (BTS)", R.drawable.img_album_exp4,0, 180, false, "music_butter", albumIdx = 5)
+            )
+            songDB.songDao().insert(
+                Song("Island", "위너 (WINNER)", R.drawable.img_album_exp9,0, 180, false, "music_island", albumIdx = 6)
+            )
+            songDB.songDao().insert(
+                Song("TOMBOY", "(여자)아이들", R.drawable.img_album_exp8,0, 180, false, "music_tomboy", albumIdx = 7)
+            )
+            songDB.songDao().insert(
+                Song("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp,0, 180, false, "music_butter", albumIdx = 8)
+            )
+            songDB.songDao().insert(
+                Song("Weekend", "태연 (Tae Yeon)", R.drawable.img_album_exp6,0, 180, false, "music_lilac", albumIdx = null)
+            )
+            songDB.songDao().insert(
+                Song("뿜뿜", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5,0, 180, false, "music_bboom", albumIdx = 9)
+            )
 
-        // 저장된 songs 데이터가 있다면 바로 리턴
-        if (songs.isNotEmpty()) return
-
-        // songs가 비어있다면 더미데이터를 넣어줌
-        songDB.songDao().insert(
-            Song("LILAC", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_lilac", false, 1)
-        )
-        songDB.songDao().insert(
-            Song("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3,0, 180, false, "music_next", false, 2)
-        )
-        songDB.songDao().insert(
-            Song("달", "악뮤 (AKMU)", R.drawable.img_album_exp7,0, 180, false, "music_moon", false, 3)
-        )
-        songDB.songDao().insert(
-            Song("Blueming", "아이유 (IU)", R.drawable.img_album_exp10,0, 180, false, "music_blueming", false, 4)
-        )
-        songDB.songDao().insert(
-            Song("flu", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false, 1)
-        )
-        songDB.songDao().insert(
-            Song("작은 것들을 위한 시 (Boy With Luv)", "방탄소년단 (BTS)", R.drawable.img_album_exp4,0, 180, false, "music_butter", albumIdx = 5)
-        )
-        songDB.songDao().insert(
-            Song("Island", "위너 (WINNER)", R.drawable.img_album_exp9,0, 180, false, "music_island", albumIdx = 6)
-        )
-        songDB.songDao().insert(
-            Song("TOMBOY", "(여자)아이들", R.drawable.img_album_exp8,0, 180, false, "music_tomboy", albumIdx = 7)
-        )
-        songDB.songDao().insert(
-            Song("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp,0, 180, false, "music_butter", albumIdx = 8)
-        )
-        songDB.songDao().insert(
-            Song("Weekend", "태연 (Tae Yeon)", R.drawable.img_album_exp6,0, 180, false, "music_lilac", albumIdx = null)
-        )
-        songDB.songDao().insert(
-            Song("뿜뿜", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5,0, 180, false, "music_bboom", albumIdx = 9)
-        )
-
-        // 데이터가 잘 들어왔는지 확인
+            // 데이터가 잘 들어왔는지 확인
 //        val _songs = songDB.songDao().getSongs()
-        Log.d("DB data", songs.toString())
+            Log.d("DB data", songs.toString())
+
+            // song 정보를 다시 넣어줌
+            songs = songDB.songDao().getSongsInAlbum(1) as ArrayList<Song>
+        }
     }
 
     inner class Timer(private val playTime: Int, var isPlaying: Boolean = true): Thread() {
