@@ -103,7 +103,7 @@ class HomeFragment : Fragment() {
                     Album("Great!", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5)
                 )
                 albumDB.albumDao().insert(
-                    Album("INVY - The 3rd Album", "태연 (TAEYEON)", R.drawable.img_album_exp6)
+                    Album("Weekend", "태연 (TAEYEON)", R.drawable.img_album_exp6)
                 )
 
 
@@ -150,13 +150,14 @@ class HomeFragment : Fragment() {
 
     private fun moveToAlbumFragment(album: Album) {
         (context as MainActivity).supportFragmentManager.beginTransaction()
-            .replace(R.id.main_frm, AlbumFragment().apply {
+            .add(R.id.main_frm, AlbumFragment().apply {
                 arguments = Bundle().apply {
                     val gson = Gson()
                     val albumJson = gson.toJson(album)
                     putString("album", albumJson)
                 }
             })
+            .addToBackStack(null) // 백 스택에 트랜잭션을 추가
             .commitAllowingStateLoss()
     }
 
