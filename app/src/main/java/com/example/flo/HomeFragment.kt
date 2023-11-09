@@ -164,10 +164,10 @@ class HomeFragment : Fragment() {
         val viewpager = binding.homePanelImgVp
         val panelAdapter = PanelVPAdapter(this)
         /* 데이터 집어넣기 */
-        panelAdapter.addFragment(PanelFragment(R.drawable.img_first_album_default))
-        panelAdapter.addFragment(PanelFragment(R.drawable.img_album_exp4))
-        panelAdapter.addFragment(PanelFragment(R.drawable.img_album_exp6))
-        panelAdapter.addFragment(PanelFragment(R.drawable.img_album_exp8))
+        panelAdapter.addFragment(PanelFragment.newInstance(R.drawable.img_first_album_default))
+        panelAdapter.addFragment(PanelFragment.newInstance(R.drawable.img_album_exp4))
+        panelAdapter.addFragment(PanelFragment.newInstance(R.drawable.img_album_exp6))
+        panelAdapter.addFragment(PanelFragment.newInstance(R.drawable.img_album_exp8))
         // 뷰페이저와 어댑터 연결
         viewpager.adapter = panelAdapter
         // 뷰페이저 좌우 스크롤 지정
@@ -208,8 +208,8 @@ class HomeFragment : Fragment() {
 
     private fun setBannerAdapter() {
         val bannerAdapter = BannerVPAdater(this)
-        bannerAdapter.addFragment(BannerFragment(R.drawable.img_home_viewpager_exp))
-        bannerAdapter.addFragment(BannerFragment(R.drawable.img_home_viewpager_exp2))
+        bannerAdapter.addFragment(BannerFragment.newInstance(R.drawable.img_home_viewpager_exp))
+        bannerAdapter.addFragment(BannerFragment.newInstance(R.drawable.img_home_viewpager_exp2))
         // 뷰페이저와 어댑터 연결
         binding.homeBannerVp.adapter = bannerAdapter
         // 뷰페이저 좌우 스크롤 지정
