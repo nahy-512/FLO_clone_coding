@@ -97,11 +97,15 @@ class HomeFragment : Fragment() {
                     Album("I NEVER DIE", "(여자) 아이들", R.drawable.img_album_exp8)
                 )
                 albumDB.albumDao().insert(
-                    Album("Map of the Soul", "방탄소년단 (BTS)", R.drawable.img_album_exp)
+                    Album("Butter (feat. Megan Thee Stallion)", "방탄소년단 (BTS)", R.drawable.img_album_exp)
                 )
                 albumDB.albumDao().insert(
                     Album("Great!", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5)
                 )
+                albumDB.albumDao().insert(
+                    Album("INVY - The 3rd Album", "태연 (TAEYEON)", R.drawable.img_album_exp6)
+                )
+
 
                 // 다시 데이터를 넣어줌
                 albums = albumDB.albumDao().getAllAlbums() as ArrayList<Album>
