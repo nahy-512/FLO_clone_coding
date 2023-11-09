@@ -68,10 +68,14 @@ class SongActivity : AppCompatActivity() {
         /* 재생 버튼 */
         binding.songPlayerPlayIv.setOnClickListener {
             setPlayerStatus(true)
+            // 알림창 띄우기
+            serviceStart(binding.songPlayerPlayIv)
         }
         /* 정지 버튼 */
         binding.songPlayerPauseIv.setOnClickListener {
             setPlayerStatus(false)
+            // 알림창 내리기
+//            serviceStop(binding.songPlayerPauseIv)
         }
         /* 이전 재생 버튼 */
         binding.songPlayerPrevIv.setOnClickListener {
@@ -228,8 +232,7 @@ class SongActivity : AppCompatActivity() {
             binding.songPlayerPauseIv.visibility = View.VISIBLE
             // 음악 재생
             mediaPlayer?.start()
-            // 알림창 띄우기
-//            serviceStart(binding.songPlayerPlayIv)
+
         } else { // 정지 상태
             binding.songPlayerPlayIv.visibility = View.VISIBLE
             binding.songPlayerPauseIv.visibility = View.GONE
@@ -237,8 +240,7 @@ class SongActivity : AppCompatActivity() {
                 // 음악 중지
                 mediaPlayer?.pause()
             }
-            // 알림창 내리기
-//            serviceStop(binding.songPlayerPauseIv)
+
         }
     }
 
