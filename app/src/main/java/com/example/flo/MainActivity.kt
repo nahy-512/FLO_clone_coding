@@ -337,7 +337,7 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
                     Song("봄 안녕", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false, 1)
                 )
                 songDB.songDao().insert(
-                    Song("작은 것들을 위한 시 (Boy With Luv)", "방탄소년단 (BTS)", R.drawable.img_album_exp4,0, 180, false, "music_butter", albumIdx = 5)
+                    Song("작은 것들을 위한 시 (Boy With Luv)", "방탄소년단 (BTS)", R.drawable.img_album_exp4,0, 180, false, "music_boywithluv", albumIdx = 5)
                 )
                 songDB.songDao().insert(
                     Song("Island", "위너 (WINNER)", R.drawable.img_album_exp9,0, 180, false, "music_island", albumIdx = 6)
@@ -349,7 +349,7 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
                     Song("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp,0, 180, false, "music_butter", albumIdx = 8)
                 )
                 songDB.songDao().insert(
-                    Song("Weekend", "태연 (Tae Yeon)", R.drawable.img_album_exp6,0, 180, false, "music_lilac", albumIdx = null)
+                    Song("Weekend", "태연 (Tae Yeon)", R.drawable.img_album_exp6,0, 180, false, "music_weekend", albumIdx = 10)
                 )
                 songDB.songDao().insert(
                     Song("뿜뿜", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5,0, 180, false, "music_bboom", albumIdx = 9)
