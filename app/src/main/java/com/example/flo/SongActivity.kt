@@ -69,7 +69,7 @@ class SongActivity : AppCompatActivity() {
         binding.songPlayerPlayIv.setOnClickListener {
             setPlayerStatus(true)
             // 알림창 띄우기
-            serviceStart(binding.songPlayerPlayIv)
+//            serviceStart(binding.songPlayerPlayIv)
         }
         /* 정지 버튼 */
         binding.songPlayerPauseIv.setOnClickListener {
