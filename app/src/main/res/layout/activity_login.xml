@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true">
 
     <ImageView
         android:id="@+id/login_close_iv"
@@ -119,14 +120,14 @@
             android:padding="3dp"
             android:text="아이디 찾기"
             android:textColor="@color/gray_color"
-            android:textSize="14sp"/>
+            android:textSize="12sp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="3dp"
             android:text="|"
             android:textColor="@color/gray_color"
-            android:textSize="14sp"/>
+            android:textSize="12sp"/>
         <TextView
             android:id="@+id/login_find_pwd_tv"
             android:layout_width="wrap_content"
@@ -134,7 +135,7 @@
             android:padding="3dp"
             android:text="비밀번호 찾기"
             android:textColor="@color/gray_color"
-            android:textSize="14sp"/>
+            android:textSize="12sp"/>
 
     </LinearLayout>
 
@@ -142,10 +143,10 @@
         android:id="@+id/login_signup_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="3dp"
+        android:padding="5dp"
         android:text="회원가입"
         android:textColor="@color/black"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="@id/login_find_layout"
         app:layout_constraintEnd_toEndOf="@id/login_login_btn"/>
@@ -175,7 +176,6 @@
             android:layout_height="wrap_content"
             android:text="아이디로 로그인"
             android:textColor="@color/white"
-            android:textStyle="bold"
             android:textSize="14sp"
             app:layout_constraintTop_toTopOf="@id/login_find_layout"
             app:layout_constraintEnd_toEndOf="@id/login_login_btn"/>
@@ -205,9 +205,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="휴대폰 번호 로그인"
+            android:text="휴대폰 번호로 로그인"
             android:textColor="@color/black"
-            android:textStyle="bold"
             android:textSize="14sp"
             app:layout_constraintTop_toTopOf="@id/login_find_layout"
             app:layout_constraintEnd_toEndOf="@id/login_login_btn"/>
