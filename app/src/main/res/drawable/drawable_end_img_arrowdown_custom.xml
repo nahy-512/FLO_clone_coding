@@ -4,6 +4,5 @@
         android:drawable="@drawable/nugu_btn_down"
         android:gravity="center_vertical"
         android:width="18dp"
-        android:height="18dp"
-        android:backgoundTine="@color/color_gray"/>
+        android:height="18dp"/>
 </layer-list>

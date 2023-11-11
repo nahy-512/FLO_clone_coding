@@ -1,6 +1,8 @@
 package com.example.flo
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,13 +27,26 @@ class LockerFragment : Fragment() {
     ): View? {
         binding = FragmentLockerBinding.inflate(inflater, container, false)
 
+        initClickListener()
+        setVPAdapter()
+
+        return binding.root
+    }
+
+    private fun initClickListener() {
+        /* 로그인 */
+        binding.lockerLoginTv.setOnClickListener {
+            Log.d("LoginActivity", "로그인 버튼 클릭!")
+            startActivity(Intent(activity, LoginActivity::class.java))
+        }
+    }
+
+    private fun setVPAdapter() {
         val lockerAdapter = LockerVPAdapter(this)
         binding.lockerContentVp.adapter = lockerAdapter
         TabLayoutMediator(binding.lockerContentTb, binding.lockerContentVp) {
                 tab, position ->
             tab.text = information[position]
         }.attach()
-
-        return binding.root
     }
 }
