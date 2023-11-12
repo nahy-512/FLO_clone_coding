@@ -40,11 +40,12 @@
         android:background="#F9F9F9">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginStart="20dp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/main_miniplayer_button_ll"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -52,6 +53,9 @@
                 android:id="@+id/main_miniplayer_title_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                android:focusable="true"
                 android:textSize="14sp"
                 android:hint="라일락"
                 android:textColor="@color/black" />
@@ -60,12 +64,15 @@
                 android:id="@+id/main_miniplayer_singer_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:textSize="12sp"
                 android:hint="아이유(IU)"/>
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/main_miniplayer_button_ll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"

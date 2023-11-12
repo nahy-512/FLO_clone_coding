@@ -143,6 +143,9 @@ class SongActivity : AppCompatActivity() {
 
         // song 정보로 UI 업데이트
         setPlayer(songs[nowPos])
+
+        // 흐르는 텍스트 처리
+        binding.songTitleTv.isSelected = true
     }
 
     private fun setLike(isLike: Boolean) {

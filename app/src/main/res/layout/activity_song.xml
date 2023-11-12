@@ -60,9 +60,14 @@
 
         <TextView
             android:id="@+id/song_title_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
+            android:layout_marginHorizontal="50dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:focusable="true"
+            android:textAlignment="center"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/black"
