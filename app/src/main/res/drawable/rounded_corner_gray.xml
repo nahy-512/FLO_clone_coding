@@ -6,7 +6,7 @@
         android:color="@color/transparent"/>
 
     <solid
-        android:color="#EFEFEF"/>
+        android:color="@color/light_gray_color"/>
 
     <padding
         android:left="1dp"

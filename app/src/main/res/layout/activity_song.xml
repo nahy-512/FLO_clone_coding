@@ -77,7 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center_vertical"
-            android:drawableEnd="@drawable/drawable_end_img_custom"
+            android:drawableEnd="@drawable/drawable_end_img_arrowmore_custom"
             android:textSize="16sp"
             android:textStyle="normal"
             android:textColor="@color/black"
