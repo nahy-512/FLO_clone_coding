@@ -54,7 +54,7 @@ class SavedSongFragment: Fragment(), EditBarDialogInterface {
                 lockerSongSelectAllTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.select_color))
             } else {
                 lockerSongSelectAllTv.text = "전체선택"
-                lockerSongListenAllIv.setImageResource(R.drawable.btn_playlist_select_off)
+                lockerSongSelectAllIv.setImageResource(R.drawable.btn_playlist_select_off)
                 lockerSongSelectAllTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_gray_color))
             }
         }
