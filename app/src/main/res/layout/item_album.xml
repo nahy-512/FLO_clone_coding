@@ -33,7 +33,7 @@
         app:layout_constraintEnd_toEndOf="@id/item_album_cover_img_cv"/>
 
     <TextView
-        android:id="@+id/item_album_title_tv"
+        android:id="@+id/item_locker_song_title_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -56,8 +56,8 @@
         android:text="아이유 (IU)"
         android:textColor="@color/gray_color"
         android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="@id/item_album_title_tv"
-        app:layout_constraintEnd_toEndOf="@id/item_album_title_tv"
-        app:layout_constraintTop_toBottomOf="@id/item_album_title_tv" />
+        app:layout_constraintStart_toStartOf="@id/item_locker_song_title_tv"
+        app:layout_constraintEnd_toEndOf="@id/item_locker_song_title_tv"
+        app:layout_constraintTop_toBottomOf="@id/item_locker_song_title_tv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
