@@ -40,19 +40,22 @@
         app:layout_constraintBottom_toBottomOf="@id/item_track_num_tv"/>
     <TextView
         android:id="@+id/item_track_title_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="2dp"
+        android:ellipsize="end"
+        android:singleLine="true"
         android:text="라일락"
         android:textColor="@color/black"
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@id/item_track_title_mark_tv"
+        app:layout_constraintEnd_toStartOf="@id/item_track_play_iv"
         app:layout_constraintTop_toTopOf="@id/item_track_num_tv"
         app:layout_constraintBottom_toBottomOf="@id/item_track_num_tv"/>
     <TextView
         android:id="@+id/item_track_singer_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
@@ -60,6 +63,7 @@
         android:textSize="12sp"
         android:textColor="@color/gray_color"
         app:layout_constraintStart_toEndOf="@id/item_track_num_tv"
+        app:layout_constraintEnd_toEndOf="@id/item_track_title_tv"
         app:layout_constraintTop_toBottomOf="@id/item_track_title_tv"/>
     <ImageView
         android:id="@+id/item_track_play_iv"
