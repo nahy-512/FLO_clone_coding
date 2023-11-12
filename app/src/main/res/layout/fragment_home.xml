@@ -433,7 +433,7 @@
             android:text="(주)드림어스컴퍼니 사업자 정보"
             android:textColor="@color/dark_gray_color"
             android:textSize="14sp"
-            android:drawableEnd="@drawable/drawable_end_img_custom"
+            android:drawableEnd="@drawable/drawable_end_img_arrowmore_custom"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/home_sns_ll"
