@@ -97,6 +97,9 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
         nowPos = getPlayerSongPosition(songId)
         // 미니플레이어 및 미디어플레이어 설정
         setPlayer(songs[nowPos])
+
+        // 흐르는 텍스트 처리
+        binding.mainMiniplayerTitleTv.isSelected = true
     }
 
     private fun getPlayerSongPosition(songId: Int): Int {
