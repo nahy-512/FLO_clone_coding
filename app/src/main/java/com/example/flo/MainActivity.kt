@@ -56,6 +56,12 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
         initClickListener()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        albumIdx = getAlbumIdx()
+    }
+
     override fun onPause() {
         super.onPause()
 
@@ -93,8 +99,15 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
         val songId = spf.getInt("songId", 1)
         Log.d("MainActivity", "저장된 songIdx: $songId")
 
+        // 저장된 albumId를 다시 가져옴
+        albumIdx = getAlbumIdx()
+        songs = songDB.songDao().getSongsInAlbum(albumIdx) as ArrayList<Song>
+
         // 현재 곡 위치 계산하기
         nowPos = getPlayerSongPosition(songId)
+        songs[nowPos] = songDB.songDao().getSong(songId)
+        Log.d("MainActivity", "songs[nowPos] = ${songs[nowPos]}")
+
         // 미니플레이어 및 미디어플레이어 설정
         setPlayer(songs[nowPos])
 
@@ -203,7 +216,7 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
 
     private fun initClickListener() {
 //        val song = Song(binding.mainMiniplayerTitleTv.text.toString(), binding.mainMiniplayerSingerTv.text.toString(), 0, 60, false, "music_lilac")
-        Log.d("Song", songs[nowPos].title + songs[nowPos].singer)
+        Log.d("Song", "${songs[nowPos].title} - ${songs[nowPos].singer}")
 
         binding.mainPlayerCl.setOnClickListener {
             savedId()
@@ -440,7 +453,7 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
                     }
                 }
             } catch (e: InterruptedException) {
-                Log.d("Song", "쓰레드가 죽었습니다. ${e.message}")
+//                Log.d("Main", "쓰레드가 죽었습니다. ${e.message}")
             }
         }
     }
