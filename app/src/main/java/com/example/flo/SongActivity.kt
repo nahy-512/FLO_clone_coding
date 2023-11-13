@@ -1,5 +1,6 @@
 package com.example.flo
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.media.MediaPlayer
@@ -119,6 +120,7 @@ class SongActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("song", MODE_PRIVATE)
         val editor = sharedPreferences.edit() // 에디터
         editor.putInt("songId", songs[nowPos].id)
+        songs[nowPos].albumIdx?.let { editor.putInt("albumId", it) }
         editor.apply()
     }
 
@@ -291,7 +293,7 @@ class SongActivity : AppCompatActivity() {
 
     private fun showCustomToast(message: String) {
         val layoutInflater = LayoutInflater.from(this).inflate(R.layout.toast_board,null)
-        val text : TextView = layoutInflater.findViewById(R.id.textViewToast)
+        val text : TextView = layoutInflater.findViewById(R.id.toast_tv)
         // 메시지 띄우기
         text.text = message
 
@@ -337,7 +339,7 @@ class SongActivity : AppCompatActivity() {
                     }
                 }
             } catch (e: InterruptedException) {
-                Log.d("Song", "쓰레드가 죽었습니다. ${e.message}")
+//                Log.d("Song", "쓰레드가 죽었습니다. ${e.message}")
             }
         }
     }
