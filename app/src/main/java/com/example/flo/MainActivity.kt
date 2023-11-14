@@ -331,82 +331,34 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
         }
         else { // songs가 비어있다면 더미데이터를 넣어줌
             Thread {
-                songDB.songDao().insert(Song("LILAC", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_lilac", false, true, 1))
-                songDB.songDao().insert(
-                    Song("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3,0, 180, false, "music_next", false, true , 2)
-                )
-                songDB.songDao().insert(
-                    Song("달", "악뮤 (AKMU)", R.drawable.img_album_exp7,0, 180, false, "music_moon", false, albumIdx = 3)
-                )
-                songDB.songDao().insert(
-                    Song("어떻게 이별까지 사랑하겠어, 널 사랑하는 거지", "악뮤 (AKMU)", R.drawable.img_album_exp7,0, 180, false, "music_moon", false, true, 3)
-                )
-                songDB.songDao().insert(
-                    Song("Blueming", "아이유 (IU)", R.drawable.img_album_exp10,0, 180, false, "music_blueming", false, true, 4)
-                )
-                songDB.songDao().insert(
-                    Song("unlucky", "아이유 (IU)", R.drawable.img_album_exp10,0, 180, false, "music_blueming", false, false, 4)
-                )
-                songDB.songDao().insert(
-                    Song("그 사람", "아이유 (IU)", R.drawable.img_album_exp10,0, 180, false, "music_blueming", false, false, 4)
-                )
-                songDB.songDao().insert(
-                    Song("시간의 바깥", "아이유 (IU)", R.drawable.img_album_exp10,0, 180, false, "music_blueming", false, false, 4)
-                )
-                songDB.songDao().insert(
-                    Song("자장가", "아이유 (IU)", R.drawable.img_album_exp10,0, 180, false, "music_blueming", false, false, 4)
-                )
-                songDB.songDao().insert(
-                    Song("Love poem", "아이유 (IU)", R.drawable.img_album_exp10,0, 180, false, "music_blueming", false, true, 4)
-                )
-                songDB.songDao().insert(
-                    Song("Flu", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false, false,1)
-                )
-                songDB.songDao().insert(
-                    Song("Coin", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_lilac", false, true, 1)
-                )
-                songDB.songDao().insert(
-                    Song("봄 안녕 봄", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false, albumIdx = 1)
-                )
-                songDB.songDao().insert(
-                    Song("Celebrity", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false, albumIdx = 1)
-                )
-                songDB.songDao().insert(
-                    Song("돌림노래 (Feat. DEAN)", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false, albumIdx = 1)
-                )
-                songDB.songDao().insert(
-                    Song("아이와 나의 바다", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false, albumIdx = 1)
-                )
-                songDB.songDao().insert(
-                    Song("어푸 (Au puh)", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false, albumIdx = 1)
-                )
-                songDB.songDao().insert(
-                    Song("에필로그", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false, albumIdx = 1)
-                )
-                songDB.songDao().insert(
-                    Song("작은 것들을 위한 시 (Boy With Luv)", "방탄소년단 (BTS)", R.drawable.img_album_exp4,0, 180, false, "music_boywithluv", isTitle = true, albumIdx = 5)
-                )
-                songDB.songDao().insert(
-                    Song("소우주", "방탄소년단 (BTS)", R.drawable.img_album_exp4,0, 180, false, "music_boywithluv", albumIdx = 5)
-                )
-                songDB.songDao().insert(
-                    Song("ISLAND", "위너 (WINNER)", R.drawable.img_album_exp9,0, 180, false, "music_island", isTitle = true, albumIdx = 6)
-                )
-                songDB.songDao().insert(
-                    Song("LOVE ME LOVE ME", "위너 (WINNER)", R.drawable.img_album_exp9,0, 180, false, "music_island", isTitle = true, albumIdx = 6)
-                )
-                songDB.songDao().insert(
-                    Song("TOMBOY", "(여자)아이들", R.drawable.img_album_exp8,0, 180, false, "music_tomboy", isTitle = true, albumIdx = 7)
-                )
-                songDB.songDao().insert(
-                    Song("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp,0, 180, false, "music_butter", isTitle = true, albumIdx = 8)
-                )
-                songDB.songDao().insert(
-                    Song("Weekend", "태연 (Tae Yeon)", R.drawable.img_album_exp6,0, 180, false, "music_weekend", isTitle = true, albumIdx = 10)
-                )
-                songDB.songDao().insert(
-                    Song("뿜뿜", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5,0, 180, false, "music_bboom", isTitle = true, albumIdx = 9)
-                )
+                songDB.songDao().apply {
+                    insert(Song("LILAC", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_lilac", false, true, 1))
+                    insert(Song("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3,0, 180, false, "music_next", false, true , 2))
+                    insert(Song("달", "악뮤 (AKMU)", R.drawable.img_album_exp7,0, 180, false, "music_moon", false, albumIdx = 3))
+                    insert(Song("어떻게 이별까지 사랑하겠어, 널 사랑하는 거지", "악뮤 (AKMU)", R.drawable.img_album_exp7,0, 180, false, "music_moon", false, true, 3))
+                    insert(Song("Blueming", "아이유 (IU)", R.drawable.img_album_exp10,0, 180, false, "music_blueming", false, true, 4))
+                    insert(Song("unlucky", "아이유 (IU)", R.drawable.img_album_exp10,0, 180, false, "music_blueming", false, false, 4))
+                    insert(Song("그 사람", "아이유 (IU)", R.drawable.img_album_exp10,0, 180, false, "music_blueming", false, false, 4))
+                    insert(Song("시간의 바깥", "아이유 (IU)", R.drawable.img_album_exp10,0, 180, false, "music_blueming", false, false, 4))
+                    insert(Song("자장가", "아이유 (IU)", R.drawable.img_album_exp10,0, 180, false, "music_blueming", false, false, 4))
+                    insert(Song("Love poem", "아이유 (IU)", R.drawable.img_album_exp10,0, 180, false, "music_blueming", false, true, 4))
+                    insert(Song("Flu", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false, false,1))
+                    insert(Song("Coin", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_lilac", false, true, 1))
+                    insert(Song("봄 안녕 봄", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false, albumIdx = 1))
+                    insert(Song("Celebrity", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_lilac", false, albumIdx = 1))
+                    insert(Song("돌림노래 (Feat. DEAN)", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false, albumIdx = 1))
+                    insert(Song("아이와 나의 바다", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_lilac", false, albumIdx = 1))
+                    insert(Song("어푸 (Au puh)", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_flu", false, albumIdx = 1))
+                    insert(Song("에필로그", "아이유 (IU)", R.drawable.img_album_exp2,0, 180, false, "music_lilac", false, albumIdx = 1))
+                    insert(Song("작은 것들을 위한 시 (Boy With Luv)", "방탄소년단 (BTS)", R.drawable.img_album_exp4,0, 180, false, "music_boywithluv", isTitle = true, albumIdx = 5))
+                    insert(Song("소우주", "방탄소년단 (BTS)", R.drawable.img_album_exp4,0, 180, false, "music_boywithluv", albumIdx = 5))
+                    insert(Song("ISLAND", "위너 (WINNER)", R.drawable.img_album_exp9,0, 180, false, "music_island", isTitle = true, albumIdx = 6))
+                    insert(Song("LOVE ME LOVE ME", "위너 (WINNER)", R.drawable.img_album_exp9,0, 180, false, "music_island", isTitle = true, albumIdx = 6))
+                    insert(Song("TOMBOY", "(여자)아이들", R.drawable.img_album_exp8,0, 180, false, "music_tomboy", isTitle = true, albumIdx = 7))
+                    insert(Song("Butter", "방탄소년단 (BTS)", R.drawable.img_album_exp,0, 180, false, "music_butter", isTitle = true, albumIdx = 8))
+                    insert(Song("Weekend", "태연 (Tae Yeon)", R.drawable.img_album_exp6,0, 180, false, "music_weekend", isTitle = true, albumIdx = 10))
+                    insert(Song("뿜뿜", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5,0, 180, false, "music_bboom", isTitle = true, albumIdx = 9))
+                }
 
                 // 데이터가 잘 들어왔는지 확인
 //        val _songs = songDB.songDao().getSongs()

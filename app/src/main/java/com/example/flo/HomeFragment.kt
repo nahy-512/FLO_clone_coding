@@ -1,6 +1,7 @@
 package com.example.flo
 
 import android.content.Context
+import android.graphics.Insets.add
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -75,39 +76,20 @@ class HomeFragment : Fragment() {
             // 앨범 데이터가 없을 때의 처리
             Thread{
                 // albums가 비어있다면 더미데이터를 넣어줌
-                albumDB.albumDao().insert(
-                    Album("IU 5th Album 'LILAC'", "아이유 (IU)", R.drawable.img_album_exp2)
-                )
-                albumDB.albumDao().insert(
-                    Album("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3)
-                )
-                albumDB.albumDao().insert(
-                    Album("항해", "악뮤 (AKMU)", R.drawable.img_album_exp7)
-                )
-                albumDB.albumDao().insert(
-                    Album("Love Poem", "아이유 (IU)", R.drawable.img_album_exp10)
-                )
-                albumDB.albumDao().insert(
-                    Album("Map of the Soul", "방탄소년단 (BTS)", R.drawable.img_album_exp4)
-                )
-                albumDB.albumDao().insert(
-                    Album("OUR TWENTY FOR", "위너 (WINNER)", R.drawable.img_album_exp9)
-                )
-                albumDB.albumDao().insert(
-                    Album("I NEVER DIE", "(여자) 아이들", R.drawable.img_album_exp8)
-                )
-                albumDB.albumDao().insert(
-                    Album("Butter (feat. Megan Thee Stallion)", "방탄소년단 (BTS)", R.drawable.img_album_exp)
-                )
-                albumDB.albumDao().insert(
-                    Album("Great!", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5)
-                )
-                albumDB.albumDao().insert(
-                    Album("Weekend", "태연 (TAEYEON)", R.drawable.img_album_exp6)
-                )
+                albumDB.albumDao().apply {
+                    insert(Album("IU 5th Album 'LILAC'", "아이유 (IU)", R.drawable.img_album_exp2))
+                    insert(Album("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3))
+                    insert(Album("항해", "악뮤 (AKMU)", R.drawable.img_album_exp7))
+                    insert(Album("Love Poem", "아이유 (IU)", R.drawable.img_album_exp10))
+                    insert(Album("Map of the Soul", "방탄소년단 (BTS)", R.drawable.img_album_exp4))
+                    insert(Album("OUR TWENTY FOR", "위너 (WINNER)", R.drawable.img_album_exp9))
+                    insert(Album("I NEVER DIE", "(여자) 아이들", R.drawable.img_album_exp8))
+                    insert(Album("Butter (feat. Megan Thee Stallion)", "방탄소년단 (BTS)", R.drawable.img_album_exp))
+                    insert(Album("Great!", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5))
+                    insert(Album("Weekend", "태연 (TAEYEON)", R.drawable.img_album_exp6))
+                }
 
-
-                // 다시 데이터를 넣어줌
+                // 추가한 데이터를 다시 albums에 넣어줌
                 albums = albumDB.albumDao().getAllAlbums() as ArrayList<Album>
 
                 // 데이터가 잘 들어왔는지 확인
