@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
     private var mediaPlayer: MediaPlayer? = null
 
     private var songs = arrayListOf<Song>()
+    private var albums = arrayListOf<Album>()
     lateinit var songDB: SongDatabase
 
     private var albumIdx: Int = 1
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
         // songDB 초기화 -> songDB의 인스턴스를 받아줌
         songDB = SongDatabase.getInstance(this)!!
 
+        inputDummyAlbums()
         inputDummySongs()
         initBottomNavigation()
     }
@@ -124,19 +126,52 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
         return 1
     }
 
+    private fun getPlayerAlbumPosition(albumId: Int): Int {
+        for (i in albums.indices) {
+            if (albums[i].id == albumId) {
+                return i
+            }
+        }
+        return 1
+    }
+
     private fun moveSong(direct: Int) {
         if (nowPos + direct < 0) {
-            Toast.makeText(this, "first song", Toast.LENGTH_SHORT).show()
+            // 이전 앨범으로 이동
+            Toast.makeText(this, "이전 앨범", Toast.LENGTH_SHORT).show()
+            moveAlbum(-1)
             return
         }
         if (nowPos + direct >= songs.size) {
-            Toast.makeText(this, "last song", Toast.LENGTH_SHORT).show()
+            // 다음 앨범으로 이동
+            Toast.makeText(this, "다음 앨범", Toast.LENGTH_SHORT).show()
+            moveAlbum(+1)
             return
         }
-
         nowPos += direct
 
         // 음악 초기화
+        initializeMusic(true)
+    }
+
+    private fun moveAlbum(direct: Int) { // 앨범을 이동하는 경우
+        val nowAlbumPos = getPlayerAlbumPosition(albumIdx)
+        if (nowAlbumPos + direct < 0) {
+            Toast.makeText(this, "first album", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (nowAlbumPos + direct >= albums.size) {
+            Toast.makeText(this, "last album", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // 앨범 아이디 업데이트
+        albumIdx += direct
+        // 해당 앨범의 수록곡으로 songs 업데이트
+        songs = songDB.songDao().getSongsInAlbum(albumIdx) as ArrayList<Song>
+        // nowPos 업데이트 (다음 앨범이면 첫 번째 수록곡부터, 이전 앨범이면 마지막 수록곡부터 재생)
+        nowPos = if (direct > 0) 0 else songs.size - 1
+        // 앨범 이동 후 음악도 초기화
         initializeMusic(true)
     }
 
@@ -317,7 +352,41 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
         initializeMusic(true)
     }
 
+    private fun inputDummyAlbums() {
+        // DB로부터 album 데이터를 모두 조회해옴 (LiveData 초기화)
+        albums = songDB.albumDao().getAllAlbums() as ArrayList<Album>
+
+        if (albums.isNotEmpty())
+            return
+        else {
+            // 앨범 데이터가 없을 때의 처리
+            Thread{
+                // albums가 비어있다면 더미데이터를 넣어줌
+                songDB.albumDao().apply {
+                    insert(Album("IU 5th Album 'LILAC'", "아이유 (IU)", R.drawable.img_album_exp2))
+                    insert(Album("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3))
+                    insert(Album("항해", "악뮤 (AKMU)", R.drawable.img_album_exp7))
+                    insert(Album("Love Poem", "아이유 (IU)", R.drawable.img_album_exp10))
+                    insert(Album("Map of the Soul", "방탄소년단 (BTS)", R.drawable.img_album_exp4))
+                    insert(Album("OUR TWENTY FOR", "위너 (WINNER)", R.drawable.img_album_exp9))
+                    insert(Album("I NEVER DIE", "(여자) 아이들", R.drawable.img_album_exp8))
+                    insert(Album("Butter (feat. Megan Thee Stallion)", "방탄소년단 (BTS)", R.drawable.img_album_exp))
+                    insert(Album("Great!", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5))
+                    insert(Album("Weekend", "태연 (TAEYEON)", R.drawable.img_album_exp6))
+                }
+
+                // 추가한 데이터를 다시 albums에 넣어줌
+                albums = songDB.albumDao().getAllAlbums() as ArrayList<Album>
+
+                // 데이터가 잘 들어왔는지 확인
+                val _albums = songDB.albumDao().getAllAlbums()
+                Log.d("DB Album data", _albums.toString())
+            }.start()
+        }
+    }
+
     private fun inputDummySongs() {
+        // 앨범 데이터 가져옴
         albumIdx = getAlbumIdx()
         Log.d("MainActivity", "저장된 albumIdx: $albumIdx")
         if (songDB.songDao().getAllSongs().isNotEmpty()) { // 저장된 songs 데이터가 있을 경우
@@ -360,12 +429,12 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
                     insert(Song("뿜뿜", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5,0, 180, false, "music_bboom", isTitle = true, albumIdx = 9))
                 }
 
-                // 데이터가 잘 들어왔는지 확인
-//        val _songs = songDB.songDao().getSongs()
-                Log.d("DB data", songs.toString())
-
                 // song 정보를 다시 넣어줌
                 songs = songDB.songDao().getSongsInAlbum(1) as ArrayList<Song>
+
+                // 데이터가 잘 들어왔는지 확인
+//        val _songs = songDB.songDao().getSongs()
+                Log.d("DB Song data", songs.toString())
             }.start()
         }
     }

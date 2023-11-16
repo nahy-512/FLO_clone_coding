@@ -1,7 +1,6 @@
 package com.example.flo
 
 import android.content.Context
-import android.graphics.Insets.add
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -25,7 +24,6 @@ class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
 
     private var albums = arrayListOf<Album>()
-//    private var albums: LiveData<List<Album>>? = null
     lateinit var albumDB: SongDatabase
 
     private var listner: AlbumClickListener? = null
@@ -49,7 +47,7 @@ class HomeFragment : Fragment() {
 
         albumDB = SongDatabase.getInstance(requireContext())!!
 
-        inputDummyAlbums()
+//        inputDummyAlbums()
         initAlbumRV()
         setPanelAdapter()
         setBannerAdapter()
@@ -66,41 +64,9 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun inputDummyAlbums() {
-        // DB로부터 album 데이터를 모두 조회해옴 (LiveData 초기화)
-        albums = albumDB.albumDao().getAllAlbums() as ArrayList<Album>
-
-        if (albums.isNotEmpty())
-            return
-        else {
-            // 앨범 데이터가 없을 때의 처리
-            Thread{
-                // albums가 비어있다면 더미데이터를 넣어줌
-                albumDB.albumDao().apply {
-                    insert(Album("IU 5th Album 'LILAC'", "아이유 (IU)", R.drawable.img_album_exp2))
-                    insert(Album("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3))
-                    insert(Album("항해", "악뮤 (AKMU)", R.drawable.img_album_exp7))
-                    insert(Album("Love Poem", "아이유 (IU)", R.drawable.img_album_exp10))
-                    insert(Album("Map of the Soul", "방탄소년단 (BTS)", R.drawable.img_album_exp4))
-                    insert(Album("OUR TWENTY FOR", "위너 (WINNER)", R.drawable.img_album_exp9))
-                    insert(Album("I NEVER DIE", "(여자) 아이들", R.drawable.img_album_exp8))
-                    insert(Album("Butter (feat. Megan Thee Stallion)", "방탄소년단 (BTS)", R.drawable.img_album_exp))
-                    insert(Album("Great!", "모모랜드 (MOMOLANDS)", R.drawable.img_album_exp5))
-                    insert(Album("Weekend", "태연 (TAEYEON)", R.drawable.img_album_exp6))
-                }
-
-                // 추가한 데이터를 다시 albums에 넣어줌
-                albums = albumDB.albumDao().getAllAlbums() as ArrayList<Album>
-
-                // 데이터가 잘 들어왔는지 확인
-                val _albums = albumDB.albumDao().getAlbumsLiveData()
-                Log.d("DB data", _albums.toString())
-            }.start()
-        }
-    }
-
-
     private fun initAlbumRV() {
+        // DB의 앨범 정보를 불러옴
+        albums = albumDB.albumDao().getAllAlbums() as ArrayList<Album>
 
         // 어댑터와 데이터 리스트 연결
         val albumRVAdapter = AlbumRVAdapter(albums)
@@ -183,7 +149,7 @@ class HomeFragment : Fragment() {
                     Thread.sleep(3000)
                     handler.sendEmptyMessage(0)
                 } catch (e : InterruptedException){
-                    Log.d("HomeFragment", "interupt 발생")
+                    Log.d("HomeFragment", "interrupt 발생")
                 }
             }
         }
