@@ -98,8 +98,8 @@ class LoginActivity: AppCompatActivity(), LoginView {
     }
 
     private fun startMainActivity() {
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
-//        startActivity( Intent(this, MainActivity::class.java))
     }
 
     override fun onLoginSuccess(code: Int, result: Result) {
