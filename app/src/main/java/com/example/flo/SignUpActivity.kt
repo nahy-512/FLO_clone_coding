@@ -10,7 +10,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SignUpActivity: AppCompatActivity() {
+class SignUpActivity: AppCompatActivity(), SignUpView {
 
     lateinit var binding: ActivitySignupBinding
 
@@ -85,26 +85,24 @@ class SignUpActivity: AppCompatActivity() {
             return
         }
 
-        val authService = getRetrofit().create(AuthProfileInterface::class.java)
-        authService.signUp(getUser()).enqueue(object: Callback<AuthResponse> {
-            // 응답이 왔을 때 실행하는 부분
-            override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
-                Log.d("SIGNUP/SUCCESS", response.toString())
-                Log.d("SIGNUP", response.body().toString())
-                val resp: AuthResponse = response.body()!!
-                when(resp.code) {
-                    1000 -> finish()
-                    2016, 2018 -> {
-                        binding.signupEmailErrorTv.visibility = View.VISIBLE
-                        binding.signupEmailErrorTv.text = resp.message
-                    }
-                }
+        val authService = AuthService()
+        authService.setSignUpView(this)
+        // API 호출
+        authService.signUp(getUser())
+        Log.d("SignUpActivity", "User: ${getUser()}")
+    }
+
+    override fun onSignUpSuccess(response: AuthResponse) {
+        when(response.code) {
+            1000 -> finish() // 성공했으면 종료
+            2016, 2018 -> {
+                binding.signupEmailErrorTv.visibility = View.VISIBLE
+                binding.signupEmailErrorTv.text = response.message
             }
-            // 네트워크 연결 자체가 실패했을 때 실행하는 부분
-            override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
-                Log.d("SIGNUP/FAILURE", t.message.toString())
-            }
-        })
-        Log.d("SIGNUP", "HELLO")
+        }
+    }
+
+    override fun onSignUpFailure() {
+        TODO("Not yet implemented")
     }
 }
