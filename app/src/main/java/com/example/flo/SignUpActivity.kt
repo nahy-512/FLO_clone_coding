@@ -93,16 +93,13 @@ class SignUpActivity: AppCompatActivity(), SignUpView {
     }
 
     override fun onSignUpSuccess(response: AuthResponse) {
-        when(response.code) {
-            1000 -> finish() // 성공했으면 종료
-            2016, 2018 -> {
-                binding.signupEmailErrorTv.visibility = View.VISIBLE
-                binding.signupEmailErrorTv.text = response.message
-            }
-        }
+        Toast.makeText(this, "회원 가입에 성공하셨습니다!", Toast.LENGTH_SHORT).show()
+        // 성공했으면 종료
+        finish()
     }
 
-    override fun onSignUpFailure() {
-        TODO("Not yet implemented")
+    override fun onSignUpFailure(message: String) {
+        binding.signupEmailErrorTv.visibility = View.VISIBLE
+        binding.signupEmailErrorTv.text = message
     }
 }

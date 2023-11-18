@@ -56,6 +56,6 @@ class SavedAlbumFragment: Fragment() {
 
     private fun getJwt(): Int {
         val spf = activity?.getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
-        return spf!!.getInt("jwt", 0)
+        return spf!!.getInt("userIdx", 0)
     }
 }

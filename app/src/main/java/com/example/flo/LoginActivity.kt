@@ -7,7 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.flo.databinding.ActivityLoginBinding
 
-class LoginActivity: AppCompatActivity() {
+class LoginActivity: AppCompatActivity(), LoginView {
 
     lateinit var binding: ActivityLoginBinding
 
@@ -50,35 +50,70 @@ class LoginActivity: AppCompatActivity() {
 
         // 사용자가 입력한 이메일, 비밀번호
         val email: String = binding.loginEmailIdEt.text.toString() + "@" + binding.loginEmailSelectEt.text.toString()
-        val pwd: String = binding.signupPwdEt.text.toString()
+        val password: String = binding.signupPwdEt.text.toString()
 
-        // DB 사용자 정보 확인
-        val userDB = SongDatabase.getInstance(this)!!
-        val user = userDB.userDao().getUser(email, pwd)
+        // 8주차 (roomDB)
+//        // DB 사용자 정보 확인
+//        val userDB = SongDatabase.getInstance(this)!!
+//        val user = userDB.userDao().getUser(email, pwd)
+//
+//        // 사용자 정보가 DB에 있다면(DB에서 유저를 찾았다면) 로그인 진행
+//        user?.let {
+//            Toast.makeText(this, "로그인에 성공하셨습니다!", Toast.LENGTH_SHORT).show()
+//            Log.d("LoginActivity", "userId: ${user.id}, $user")
+////            saveJwt(user.id)
+//            // 로그인이 완료됐다면 메인 화면으로 이동
+//            startMainActivity()
+//            return
+//        }
+//        // 찾지 못했다면 토스트 메시지 출력
+//        Toast.makeText(this, "회원 정보가 존재하지 않습니다.", Toast.LENGTH_SHORT).show()
 
-        // 사용자 정보가 DB에 있다면(DB에서 유저를 찾았다면) 로그인 진행
-        user?.let {
-            Toast.makeText(this, "로그인에 성공하셨습니다!", Toast.LENGTH_SHORT).show()
-            Log.d("LoginActivity", "userId: ${user.id}, $user")
-            saveJwt(user.id)
-            // 로그인이 완료됐다면 메인 화면으로 이동
-            startMainActivity()
-            return
-        }
-        // 찾지 못했다면 토스트 메시지 출력
-        Toast.makeText(this, "회원 정보가 존재하지 않습니다.", Toast.LENGTH_SHORT).show()
+        // 9주차 (서버 연동)
+        val authService = AuthService()
+        authService.setLoginView(this)
+        // API 호출
+        authService.login(User(email, password, ""))
     }
 
-    private fun saveJwt(jwt: Int) {
+    // 8주차 (roomDB)
+//    private fun saveJwt(jwt: Int) {
+//        val spf = getSharedPreferences("auth", MODE_PRIVATE)
+//        val editor = spf.edit()
+//
+//        // jwt 저장
+//        editor.putInt("jwt", jwt).apply()
+//    }
+
+    // 9주차 (서버 연동)
+    private fun saveJwt(userIdx: Int, jwt: String) {
         val spf = getSharedPreferences("auth", MODE_PRIVATE)
         val editor = spf.edit()
 
         // jwt 저장
-        editor.putInt("jwt", jwt).apply()
+        editor
+            .putInt("userIdx", userIdx)
+            .putString("jwt", jwt)
+            .apply()
     }
 
     private fun startMainActivity() {
         finish()
 //        startActivity( Intent(this, MainActivity::class.java))
+    }
+
+    override fun onLoginSuccess(code: Int, result: Result) {
+        when (code) {
+            1000 -> {
+                Toast.makeText(this, "로그인에 성공하셨습니다!", Toast.LENGTH_SHORT).show()
+                saveJwt(result.userIdx, result.jwt)
+                startMainActivity()
+            }
+        }
+    }
+
+    override fun onLoginFailure(message: String) {
+        // 실패 처리
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
