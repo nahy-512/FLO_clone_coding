@@ -6,6 +6,7 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
@@ -298,6 +299,7 @@ class SongActivity : AppCompatActivity() {
         text.text = message
 
         val toast = Toast(this)
+        toast.setGravity(Gravity.BOTTOM, 0, 350)
         toast.view = layoutInflater
         toast.show()
     }
