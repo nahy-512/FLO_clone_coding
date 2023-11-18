@@ -13,6 +13,6 @@ interface UserDao {
     @Query("SELECT * FROM UserTable")
     fun getAllUsers(): List<User>
 
-    @Query("SELECT * FROM UserTable WHERE email = :email AND passward = :passward")
-    fun getUser(email: String, passward: String): User?
+    @Query("SELECT * FROM UserTable WHERE email = :email AND password = :password")
+    fun getUser(email: String, password: String): User?
 }

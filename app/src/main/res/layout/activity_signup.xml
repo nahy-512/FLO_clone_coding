@@ -72,6 +72,32 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/signup_email_error_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:textColor="@color/form_error"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@id/signup_email_layout"
+        app:layout_constraintTop_toBottomOf="@+id/signup_email_layout"/>
+
+    <EditText
+        android:id="@+id/signup_name_et"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:hint="이름"
+        android:paddingBottom="25dp"
+        android:inputType="text"
+        android:backgroundTint="@color/gray_color"
+        android:textColorHint="@color/gray_color"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/signup_email_layout"
+        app:layout_constraintStart_toStartOf="@id/signup_email_layout"/>
+
     <EditText
         android:id="@+id/signup_pwd_et"
         android:layout_width="0dp"
@@ -83,7 +109,7 @@
         android:backgroundTint="@color/gray_color"
         android:textColorHint="@color/gray_color"
         android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@id/signup_email_layout"
+        app:layout_constraintTop_toBottomOf="@id/signup_name_et"
         app:layout_constraintStart_toStartOf="@id/signup_email_layout"
         app:layout_constraintEnd_toEndOf="@id/signup_email_layout"/>
 
