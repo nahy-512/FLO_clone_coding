@@ -49,6 +49,9 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
         inputDummyAlbums()
         inputDummySongs()
         initBottomNavigation()
+
+        // jwt 확인
+        Log.d("MAIN/JWT_TO_SERVICE", getJwt().toString())
     }
 
     override fun onStart() {
@@ -279,6 +282,12 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
         binding.mainMiniplayerNextBtn.setOnClickListener {
             moveSong(+1)
         }
+    }
+
+    private fun getJwt(): String? {
+        val spf = getSharedPreferences("auth", MODE_PRIVATE)
+
+        return spf!!.getString("jwt", "")
     }
 
     private fun savedId() {

@@ -60,7 +60,7 @@ class LockerFragment : Fragment() {
         // 텍스트를 로그인으로 할지, 로그아웃으로 할지 결정
         val jwt = getJwt()
 
-        if (jwt == 0) { // 로그인을 헤야하는 상황
+        if (jwt == "") { // 로그인을 헤야하는 상황
             binding.lockerLoginTv.text = "로그인"
             binding.lockerLoginTv.setOnClickListener {
                 startActivity(Intent(activity, LoginActivity::class.java))
@@ -79,11 +79,14 @@ class LockerFragment : Fragment() {
         // jwt가 0인 상태로 만들어서 로그아웃
         val spf = activity?.getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
         // jwt라는 키 값에 저장된 값을 없애줌
-        spf!!.edit().remove("jwt").apply()
+        spf!!.edit()
+            .remove("jwt")
+            .remove("userIdx")
+            .apply()
     }
 
-    private fun getJwt(): Int {
+    private fun getJwt(): String? {
         val spf = activity?.getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
-        return spf!!.getInt("jwt", 0)
+        return spf!!.getString("jwt", "")
     }
 }
