@@ -8,6 +8,7 @@ import retrofit2.Response
 class AuthService {
     private lateinit var signUpView: SignUpView
     private lateinit var loginView: LoginView
+    private lateinit var splashView: SplashView
 
     fun setSignUpView(signUpView: SignUpView) {
         this.signUpView = signUpView
@@ -15,6 +16,10 @@ class AuthService {
 
     fun setLoginView(loginView: LoginView) {
         this.loginView = loginView
+    }
+
+    fun setSplashView(splashView: SplashView) {
+        this.splashView = splashView
     }
 
     fun signUp(user: User) {
@@ -60,6 +65,25 @@ class AuthService {
                 Log.d("LOGIN/FAILURE", t.message.toString())
             }
         })
-        Log.d("SIGNUP", "HELLO")
+    }
+
+    fun autoLogin(jwt: String) {
+
+        val authService = getRetrofit().create(AuthRetrofitInterface::class.java)
+
+        authService.autoLogin(jwt).enqueue(object : Callback<AuthResponse> {
+            override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
+                Log.d("AUTO-LOGIN/SUCCESS", response.toString())
+                val resp: AuthResponse = response.body()!!
+                when (resp.code) {
+                    1000 -> splashView.onAutoLoginSuccess()
+                    else -> splashView.onAutoLoginFailure(resp.message) // 자동 로그인에 실패한 경우
+                }
+            }
+
+            override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
+                Log.d("AUTO-LOGIN/FAILURE", t.message.toString())
+            }
+        })
     }
 }
