@@ -3,7 +3,7 @@ package com.example.flo
 import com.google.gson.annotations.SerializedName
 
 data class AuthResponse(
-    @SerializedName(value = "isSunness") val isSuccess: Boolean,
+    @SerializedName(value = "isSuccess") val isSuccess: Boolean,
     @SerializedName(value = "code") val code: Int,
     @SerializedName(value = "message") val message: String,
     @SerializedName(value = "result") val result: Result? // 회원가입에서는 null
