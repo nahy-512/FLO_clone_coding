@@ -364,7 +364,7 @@ class MainActivity : AppCompatActivity(), AlbumClickListener {
                 // albums가 비어있다면 더미데이터를 넣어줌
                 songDB.albumDao().apply {
                     insert(Album("IU 5th Album 'LILAC'", "아이유 (IU)", R.drawable.img_album_exp2))
-                    insert(Album("Next Level", "에스파 (AESPA)", R.drawable.img_album_exp3))
+                    insert(Album("iScreaM Vol. 10 : Next Level Remixes", "에스파 (AESPA)", R.drawable.img_album_exp3))
                     insert(Album("항해", "악뮤 (AKMU)", R.drawable.img_album_exp7))
                     insert(Album("Love Poem", "아이유 (IU)", R.drawable.img_album_exp10))
                     insert(Album("Map of the Soul", "방탄소년단 (BTS)", R.drawable.img_album_exp4))

@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:paddingVertical="20dp"
     android:paddingHorizontal="15dp"
-    android:minWidth="350dp"
+    android:minWidth="380dp"
     android:gravity="center"
     android:background="@drawable/bg_custom_toast">
 
