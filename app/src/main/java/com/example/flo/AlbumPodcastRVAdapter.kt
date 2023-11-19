@@ -2,6 +2,7 @@ package com.example.flo
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,6 +13,16 @@ import com.bumptech.glide.Glide
 import com.example.flo.databinding.ItemAlbumBinding
 
 class AlbumPodcastRVAdapter(val context: Context, val result: AlbumResult): RecyclerView.Adapter<AlbumPodcastRVAdapter.ViewHolder>() {
+
+    interface MyItemClickListener {
+        fun onItemClick(album: Albums)
+//        fun onPlayBtnClick(albumIdx: Int)
+    }
+
+    private lateinit var mItemClickListener: AlbumPodcastRVAdapter.MyItemClickListener // 전달받은 리스너 객체를 저장할 변수
+    fun setMyItemClickListener(itemClickListener: AlbumPodcastRVAdapter.MyItemClickListener) { // 외부에서 전달받을 수 있는 함수
+        mItemClickListener = itemClickListener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumPodcastRVAdapter.ViewHolder {
         val binding: ItemAlbumBinding = ItemAlbumBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -31,6 +42,8 @@ class AlbumPodcastRVAdapter(val context: Context, val result: AlbumResult): Recy
         }
         holder.title.text = item.title
         holder.singer.text = item.singer
+
+        holder.itemView.setOnClickListener { mItemClickListener.onItemClick(item) }
     }
 
     override fun getItemCount(): Int = result.albums.size

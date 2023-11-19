@@ -59,7 +59,7 @@ class HomeFragment : Fragment(), HomeView {
     override fun onStart() {
         super.onStart()
 
-        getAlbumss()
+        getAlbums()
     }
 
     override fun onAttach(context: Context) {
@@ -93,7 +93,7 @@ class HomeFragment : Fragment(), HomeView {
             // 아이템 전체 클릭
             override fun onItemClick(album: Album) {
                 // 앨범 프레그먼트로 전환
-                moveToAlbumFragment(album)
+                moveToAlbumFragment(album, true)
             }
             // 아이템 재생 버튼 클릭
             override fun onPlayBtnClick(albumIdx: Int) {
@@ -103,7 +103,7 @@ class HomeFragment : Fragment(), HomeView {
         })
     }
 
-    private fun getAlbumss() {
+    private fun getAlbums() {
         val albumService = AlbumService()
         albumService.setHomeView(this)
         // 앨범 정보를 받아옴
@@ -115,15 +115,26 @@ class HomeFragment : Fragment(), HomeView {
 
         binding.homePodcastRv.adapter = podAdapter
         binding.homePodcastRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+        /* 아이템 클릭 이벤트 */
+        podAdapter.setMyItemClickListener(object : AlbumPodcastRVAdapter.MyItemClickListener {
+            // 아이템 전체 클릭
+            override fun onItemClick(album: Albums) {
+                // 앨범 프레그먼트로 전환
+                moveToAlbumFragment(album, false)
+            }
+        })
     }
 
-    private fun moveToAlbumFragment(album: Album) {
+    private fun moveToAlbumFragment(album: Any, isRoomDB: Boolean) {
+        Log.d("HomeFragment", "album: $album")
         (context as MainActivity).supportFragmentManager.beginTransaction()
             .add(R.id.main_frm, AlbumFragment().apply {
                 arguments = Bundle().apply {
                     val gson = Gson()
                     val albumJson = gson.toJson(album)
                     putString("album", albumJson)
+                    putBoolean("isRoomData", isRoomDB)
                 }
             })
             .addToBackStack(null) // 백 스택에 트랜잭션을 추가

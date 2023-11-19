@@ -18,3 +18,11 @@ data class Song(
 ) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 }
+
+// 수록곡용
+data class Track(
+    var id: Int = 0, // songIdx
+    var title: String = "", // 제목
+    var singer: String = "", // 가수
+    var isTitle: Boolean = false // 타이틀곡 여부
+)

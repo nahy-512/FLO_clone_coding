@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flo.databinding.ItemTrackBinding
 
-class TrackRVAdapter(): RecyclerView.Adapter<TrackRVAdapter.ViewHolder>() {
+class TrackRVAdapter: RecyclerView.Adapter<TrackRVAdapter.ViewHolder>() {
 
-    private var songs = ArrayList<Song>()
+    private var songs = ArrayList<Track>()
 
-    fun addSongs(songs: ArrayList<Song>) {
+    fun addSongs(songs: ArrayList<Track>) {
         this.songs.clear()
         this.songs.addAll(songs)
 
@@ -36,7 +36,7 @@ class TrackRVAdapter(): RecyclerView.Adapter<TrackRVAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: ItemTrackBinding): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(song: Song) {
+        fun bind(song: Track) {
             binding.itemTrackTitleTv.text = song.title
             binding.itemTrackSingerTv.text = song.singer
             // 타이틀 여부
