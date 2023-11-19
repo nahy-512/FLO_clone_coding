@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +20,7 @@ interface AlbumClickListener {
     fun onAlbumReceived(albumIdx: Int)
 }
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), HomeView {
 
     lateinit var binding: FragmentHomeBinding
 
@@ -53,6 +54,12 @@ class HomeFragment : Fragment() {
         setBannerAdapter()
 
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        getAlbumss()
     }
 
     override fun onAttach(context: Context) {
@@ -94,6 +101,20 @@ class HomeFragment : Fragment() {
                 listner?.onAlbumReceived(albumIdx)
             }
         })
+    }
+
+    private fun getAlbumss() {
+        val albumService = AlbumService()
+        albumService.setHomeView(this)
+        // 앨범 정보를 받아옴
+        albumService.getAlbums()
+    }
+
+    private fun initPodcastRV(result: AlbumResult) {
+        val podAdapter = AlbumPodcastRVAdapter(requireContext(), result)
+
+        binding.homePodcastRv.adapter = podAdapter
+        binding.homePodcastRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
     }
 
     private fun moveToAlbumFragment(album: Album) {
@@ -163,5 +184,21 @@ class HomeFragment : Fragment() {
         binding.homeBannerVp.adapter = bannerAdapter
         // 뷰페이저 좌우 스크롤 지정
         binding.homeBannerVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+    }
+
+    override fun onGetAlbumsLoading() {
+        binding.homeLoadingPb.visibility = View.VISIBLE
+    }
+
+    override fun onGetAlbumsSuccess(code: Int, result: AlbumResult) {
+        Log.d("HomeFragment", "onGetAlbumsSuccess")
+        binding.homeLoadingPb.visibility = View.GONE
+        //
+        initPodcastRV(result)
+    }
+
+    override fun onGetAlbumsFailure(code: Int, message: String) {
+        Log.d("HomeFragment", "onGetAlbumsFailure")
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }
