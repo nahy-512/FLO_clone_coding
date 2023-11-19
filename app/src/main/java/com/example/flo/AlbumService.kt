@@ -7,9 +7,14 @@ import retrofit2.Response
 
 class AlbumService {
     private lateinit var homeView: HomeView
+    private lateinit var albumView: AlbumView
 
     fun setHomeView(homeView: HomeView) {
         this.homeView = homeView
+    }
+
+    fun setAlbumView(albumView: AlbumView) {
+        this.albumView = albumView
     }
 
     fun getAlbums() {
@@ -22,7 +27,7 @@ class AlbumService {
                 if (response.isSuccessful && response.code() == 200) {
                     val resp: AlbumResponse = response.body()!!
 
-                    Log.d("SONG-RESPONSE", resp.toString())
+                    Log.d("ALBUM-RESPONSE", resp.toString())
 
                     when (val code = resp.code) {
                         1000 -> {
@@ -39,4 +44,30 @@ class AlbumService {
         })
     }
 
+    fun getAlbumTracks(albumIdx: Int) {
+        val albumService = getRetrofit().create(AlbumRetrofitInterface::class.java)
+
+        albumView.onGetAlbumTracksLoading()
+
+        albumService.getAlbumTracks(albumIdx).enqueue(object: Callback<AlbumTrackResponse> {
+            override fun onResponse(call: Call<AlbumTrackResponse>, response: Response<AlbumTrackResponse>) {
+                if (response.isSuccessful && response.code() == 200) {
+                    val resp: AlbumTrackResponse = response.body()!!
+
+                    Log.d("ALBUM-RESPONSE", resp.toString())
+
+                    when (val code = resp.code) {
+                        1000 -> {
+                            albumView.onGetAlbumTracksSuccess(code, resp.result)
+                        }
+                        else -> albumView.onGetAlbumTracksFailure(code, resp.message)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<AlbumTrackResponse>, t: Throwable) {
+                albumView.onGetAlbumTracksFailure(400, t.message.toString())
+            }
+        })
+    }
 }

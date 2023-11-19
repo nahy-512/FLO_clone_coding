@@ -11,11 +11,12 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.bumptech.glide.Glide
 import com.example.flo.databinding.FragmentAlbumBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 
-class AlbumFragment : Fragment() {
+class AlbumFragment : Fragment()  {
 
     lateinit var binding: FragmentAlbumBinding
     private var gson: Gson = Gson()
@@ -23,6 +24,7 @@ class AlbumFragment : Fragment() {
     private val information = arrayListOf("수록곡", "상세정보", "영상")
 
     private var albumId: Int = 1
+    private var isRoomData: Boolean = false
     private var isLiked: Boolean = false
 
     override fun onCreateView(
@@ -42,7 +44,7 @@ class AlbumFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        val albumAdapter = AlbumVPAdapter(this, albumId)
+        val albumAdapter = AlbumVPAdapter(this, albumId, isRoomData)
         binding.albumContentVp.adapter = albumAdapter
         // 탭 레이아웃을 뷰페이저와 동기화
         TabLayoutMediator(binding.albumContentTb, binding.albumContentVp) {
@@ -79,19 +81,30 @@ class AlbumFragment : Fragment() {
         // argument에서 데이터를 꺼내기
         val albumJson = arguments?.getString("album")
         val album = gson.fromJson(albumJson, Album::class.java)
-        albumId = album.id
-        Log.d("AlbumFragment", "albumId: $albumId")
+        isRoomData = arguments?.getBoolean("isRoomData", false) == true
+        if (isRoomData) {
+            albumId = album.id
+        } else {
+            val albums = gson.fromJson(albumJson, Albums::class.java)
+            albumId = albums.id
+        }
+        Log.d("AlbumFragment", "isRoomData: ${isRoomData}, albumId: $albumId")
+
         // 좋아요 초기화
         isLiked = isLikedAlbum(albumId)
         // 바인딩
-        setInit(album)
+        setInit(album, isRoomData)
     }
 
-    private fun setInit(album: Album) {
+    private fun setInit(album: Album, isRoomData: Boolean) {
         // 앨범 제목, 가수, 이미지 설정
         binding.albumTitleTv.text = album.title
         binding.albumSingerTv.text = album.singer
-        album.coverImg?.let { binding.albumCoverImgIv.setImageResource(it) }
+        if (isRoomData) {
+            album.coverImg?.let { binding.albumCoverImgIv.setImageResource(it) }
+        } else {
+            Glide.with(requireContext()).load(album.coverImgUrl).into(binding.albumCoverImgIv)
+        }
         // 앨범 좋아요 설정
         if (isLiked) {
             binding.albumLikeIv.setImageResource(R.drawable.ic_my_like_on)
