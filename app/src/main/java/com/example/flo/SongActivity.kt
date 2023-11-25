@@ -123,6 +123,12 @@ class SongActivity : AppCompatActivity() {
         editor.putInt("songId", songs[nowPos].id)
         songs[nowPos].albumIdx?.let { editor.putInt("albumId", it) }
         editor.apply()
+
+        editor
+            .putInt("songId", songs[nowPos].id)
+            .putString("title", songs[nowPos].title)
+            .putBoolean("isPlaying", songs[nowPos].isPlaying)
+            .apply()
     }
 
     fun serviceStart(view: View) {
