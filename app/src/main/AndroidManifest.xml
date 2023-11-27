@@ -13,13 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FLO" >
         <service
-            android:name=".Foreground"
+            android:name=".ui.song.Foreground"
             android:enabled="true"
             android:exported="true" >
         </service>
 
         <activity
-            android:name=".SplashActivity"
+            android:name=".ui.splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,10 +27,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".SongActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".SignUpActivity" />
+        <activity android:name=".ui.main.MainActivity" />
+        <activity android:name=".ui.song.SongActivity" />
+        <activity android:name=".ui.signin.LoginActivity" />
+        <activity android:name=".ui.signup.SignUpActivity" />
     </application>
 
 </manifest>
