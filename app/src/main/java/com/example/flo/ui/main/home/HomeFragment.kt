@@ -16,12 +16,17 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.flo.R
 import com.example.flo.data.entities.Album
 import com.example.flo.data.local.SongDatabase
-import com.example.flo.data.remote.AlbumResult
-import com.example.flo.data.remote.AlbumService
-import com.example.flo.data.remote.Albums
+import com.example.flo.data.remote.album.AlbumResult
+import com.example.flo.data.remote.album.AlbumService
+import com.example.flo.data.remote.album.Albums
+import com.example.flo.data.remote.album.HomeView
 import com.example.flo.databinding.FragmentHomeBinding
 import com.example.flo.ui.main.MainActivity
 import com.example.flo.ui.main.album.AlbumFragment
+import com.example.flo.ui.main.home.adapter.AlbumPodcastRVAdapter
+import com.example.flo.ui.main.home.adapter.AlbumRVAdapter
+import com.example.flo.ui.main.home.adapter.BannerVPAdater
+import com.example.flo.ui.main.home.adapter.PanelVPAdapter
 import com.google.gson.Gson
 
 interface AlbumClickListener {

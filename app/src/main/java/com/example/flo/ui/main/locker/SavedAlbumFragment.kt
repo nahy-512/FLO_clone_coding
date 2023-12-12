@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flo.data.entities.Album
 import com.example.flo.data.local.SongDatabase
 import com.example.flo.databinding.FragmentLockerSavedalbumBinding
+import com.example.flo.ui.main.locker.adapter.SavedAlbumRVAdapter
 
 class SavedAlbumFragment: Fragment() {
 

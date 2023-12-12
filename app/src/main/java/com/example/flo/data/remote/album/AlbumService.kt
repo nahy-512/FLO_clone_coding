@@ -1,8 +1,6 @@
-package com.example.flo.data.remote
+package com.example.flo.data.remote.album
 
 import android.util.Log
-import com.example.flo.ui.main.home.AlbumView
-import com.example.flo.ui.main.home.HomeView
 import com.example.flo.utils.getRetrofit
 import retrofit2.Call
 import retrofit2.Callback

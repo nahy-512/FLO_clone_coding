@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.flo.databinding.FragmentLockerBinding
+import com.example.flo.ui.main.locker.adapter.LockerVPAdapter
 import com.example.flo.ui.signin.LoginActivity
 import com.google.android.material.tabs.TabLayoutMediator
 

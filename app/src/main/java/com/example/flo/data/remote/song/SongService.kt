@@ -1,7 +1,6 @@
-package com.example.flo.data.remote
+package com.example.flo.data.remote.song
 
 import android.util.Log
-import com.example.flo.ui.main.look.LookView
 import com.example.flo.utils.getRetrofit
 import retrofit2.Call
 import retrofit2.Callback

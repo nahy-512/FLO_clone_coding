@@ -5,8 +5,9 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.flo.data.entities.User
-import com.example.flo.data.remote.AuthService
-import com.example.flo.data.remote.Result
+import com.example.flo.data.remote.auth.AuthService
+import com.example.flo.data.remote.auth.LoginView
+import com.example.flo.data.remote.auth.Result
 import com.example.flo.databinding.ActivityLoginBinding
 import com.example.flo.ui.main.MainActivity
 import com.example.flo.ui.signup.SignUpActivity

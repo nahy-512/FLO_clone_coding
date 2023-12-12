@@ -1,7 +1,7 @@
-package com.example.flo.ui.main.home
+package com.example.flo.data.remote.album
 
-import com.example.flo.data.remote.AlbumResult
-import com.example.flo.data.remote.AlbumTracks
+import com.example.flo.data.remote.album.AlbumResult
+import com.example.flo.data.remote.album.AlbumTracks
 
 
 interface HomeView {

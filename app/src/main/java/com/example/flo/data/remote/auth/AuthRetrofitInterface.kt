@@ -1,4 +1,4 @@
-package com.example.flo.data.remote
+package com.example.flo.data.remote.auth
 
 import com.example.flo.data.entities.User
 import retrofit2.Call

@@ -1,4 +1,4 @@
-package com.example.flo.ui.main.home
+package com.example.flo.ui.main.home.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,8 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.flo.data.remote.AlbumResult
-import com.example.flo.data.remote.Albums
+import com.example.flo.data.remote.album.AlbumResult
+import com.example.flo.data.remote.album.Albums
 import com.example.flo.databinding.ItemAlbumBinding
 
 class AlbumPodcastRVAdapter(val context: Context, val result: AlbumResult): RecyclerView.Adapter<AlbumPodcastRVAdapter.ViewHolder>() {

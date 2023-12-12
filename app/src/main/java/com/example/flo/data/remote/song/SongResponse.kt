@@ -1,4 +1,4 @@
-package com.example.flo.data.remote
+package com.example.flo.data.remote.song
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,4 +1,4 @@
-package com.example.flo.data.remote
+package com.example.flo.data.remote.song
 
 import retrofit2.Call
 import retrofit2.http.GET
