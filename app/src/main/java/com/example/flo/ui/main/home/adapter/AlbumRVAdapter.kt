@@ -1,4 +1,4 @@
-package com.example.flo.ui.main.home
+package com.example.flo.ui.main.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

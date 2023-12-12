@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.flo.R
 import com.example.flo.data.entities.Track
 import com.example.flo.data.local.SongDatabase
-import com.example.flo.data.remote.AlbumService
-import com.example.flo.data.remote.AlbumTracks
+import com.example.flo.data.remote.album.AlbumService
+import com.example.flo.data.remote.album.AlbumTracks
 import com.example.flo.databinding.FragmentSongBinding
-import com.example.flo.ui.main.home.AlbumView
+import com.example.flo.data.remote.album.AlbumView
 import com.example.flo.ui.main.look.TrackRVAdapter
 
 class SongFragment : Fragment(), AlbumView {

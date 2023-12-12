@@ -6,8 +6,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.flo.data.entities.User
-import com.example.flo.data.remote.AuthResponse
-import com.example.flo.data.remote.AuthService
+import com.example.flo.data.remote.auth.AuthResponse
+import com.example.flo.data.remote.auth.AuthService
+import com.example.flo.data.remote.auth.SignUpView
 import com.example.flo.databinding.ActivitySignupBinding
 
 class SignUpActivity: AppCompatActivity(), SignUpView {

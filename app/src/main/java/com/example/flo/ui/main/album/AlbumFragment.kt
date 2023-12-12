@@ -13,9 +13,10 @@ import com.example.flo.R
 import com.example.flo.data.entities.Album
 import com.example.flo.data.entities.Like
 import com.example.flo.data.local.SongDatabase
-import com.example.flo.data.remote.Albums
+import com.example.flo.data.remote.album.Albums
 import com.example.flo.databinding.FragmentAlbumBinding
 import com.example.flo.ui.main.MainActivity
+import com.example.flo.ui.main.album.adapter.AlbumVPAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 

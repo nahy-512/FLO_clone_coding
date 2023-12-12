@@ -1,6 +1,6 @@
-package com.example.flo.ui.signin
+package com.example.flo.data.remote.auth
 
-import com.example.flo.data.remote.Result
+import com.example.flo.data.remote.auth.Result
 
 interface LoginView {
     fun onLoginSuccess(code: Int, result: Result)

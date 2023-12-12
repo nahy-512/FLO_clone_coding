@@ -11,6 +11,7 @@ import com.example.flo.R
 import com.example.flo.data.entities.Song
 import com.example.flo.data.local.SongDatabase
 import com.example.flo.databinding.FragmentLockerSavedsongBinding
+import com.example.flo.ui.main.locker.adapter.SavedSongRVAdapter
 
 class SavedSongFragment: Fragment(), EditBarDialogInterface {
 

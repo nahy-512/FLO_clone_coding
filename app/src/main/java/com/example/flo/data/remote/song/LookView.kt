@@ -1,6 +1,6 @@
-package com.example.flo.ui.main.look
+package com.example.flo.data.remote.song
 
-import com.example.flo.data.remote.FloChartResult
+import com.example.flo.data.remote.song.FloChartResult
 
 interface LookView {
     fun onGetSongsLoading()

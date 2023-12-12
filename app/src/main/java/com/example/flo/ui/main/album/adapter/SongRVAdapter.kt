@@ -1,4 +1,4 @@
-package com.example.flo.ui.main.album
+package com.example.flo.ui.main.album.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.flo.data.remote.FloChartResult
+import com.example.flo.data.remote.song.FloChartResult
 import com.example.flo.databinding.ItemChartBinding
 
 class SongRVAdapter(val context: Context, val result: FloChartResult): RecyclerView.Adapter<SongRVAdapter.ViewHolder>() {

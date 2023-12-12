@@ -8,11 +8,11 @@ import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.flo.data.remote.AuthService
+import com.example.flo.data.remote.auth.AuthService
 import com.example.flo.databinding.ActivitySplashBinding
 import com.example.flo.ui.main.MainActivity
 import com.example.flo.ui.signin.LoginActivity
-import com.example.flo.ui.signin.SplashView
+import com.example.flo.data.remote.auth.SplashView
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity: AppCompatActivity(), SplashView {
