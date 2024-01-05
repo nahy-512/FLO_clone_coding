@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/look_sv"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -9,7 +10,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F8F7F7"
         android:fitsSystemWindows="true">
 
         <TextView
@@ -85,14 +85,10 @@
             app:layout_constraintStart_toStartOf="@id/look_title_tv"
             app:layout_constraintTop_toBottomOf="@id/look_tab_scrollview">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/look_chart_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="차트"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/black" />
+                style="@style/look_subtitle_tv" />
 
             <ImageView
                 android:layout_width="25dp"
@@ -187,32 +183,13 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-            android:id="@+id/look_video_ll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_marginTop="30dp"
-            app:layout_constraintStart_toStartOf="@id/look_title_tv"
-            app:layout_constraintTop_toBottomOf="@id/look_chart_total_cl">
-
-            <TextView
-                android:id="@+id/look_video_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="영상"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/black" />
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center_vertical"
-                android:backgroundTint="@color/black"
-                android:src="@drawable/btn_main_arrow_more"/>
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/look_video_tv"
+            android:layout_marginTop="50dp"
+            android:text="영상"
+            app:layout_constraintStart_toStartOf="@id/look_chart_total_cl"
+            app:layout_constraintTop_toBottomOf="@id/look_chart_total_cl"
+            style="@style/look_subtitle_tv"/>
 
         <LinearLayout
             android:id="@+id/look_video_layout"
@@ -222,7 +199,7 @@
             android:layout_marginBottom="20dp"
             android:layout_marginHorizontal="30dp"
             android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/look_video_ll"
+            app:layout_constraintTop_toBottomOf="@id/look_video_tv"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_bias="0">
@@ -269,6 +246,88 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/look_genre_tv"
+            android:layout_marginTop="50dp"
+            android:text="장르"
+            app:layout_constraintStart_toStartOf="@id/look_chart_total_cl"
+            app:layout_constraintTop_toBottomOf="@id/look_video_layout"
+            style="@style/look_subtitle_tv"/>
+
+        <GridLayout
+            android:id="@+id/look_genre_gl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:columnCount="3"
+            android:rowCount="3"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/look_genre_tv"
+            app:layout_constraintStart_toStartOf="@id/look_chart_total_cl"
+            app:layout_constraintEnd_toEndOf="@id/look_chart_total_cl">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/look_genre1_iv"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/img_jenre_exp_1"
+                    style="@style/look_genre_iv" />
+                <ImageView
+                    android:id="@+id/look_genre2_iv"
+                    android:layout_marginStart="4dp"
+                    android:src="@drawable/img_jenre_exp_2"
+                    style="@style/look_genre_iv"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+                <ImageView
+                    android:id="@+id/look_genre3_iv"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/img_jenre_exp_3"
+                    style="@style/look_genre_iv" />
+                <ImageView
+                    android:id="@+id/look_genre4_iv"
+                    android:layout_marginStart="4dp"
+                    android:src="@drawable/img_jenre_exp_1"
+                    style="@style/look_genre_iv"/>
+            </LinearLayout>
+
+        </GridLayout>
+
+        <TextView
+            android:id="@+id/look_situation_tv"
+            android:layout_marginTop="200dp"
+            android:text="상황"
+            app:layout_constraintStart_toStartOf="@id/look_chart_total_cl"
+            app:layout_constraintTop_toBottomOf="@id/look_genre_gl"
+            style="@style/look_subtitle_tv"/>
+
+        <TextView
+            android:id="@+id/look_mood_tv"
+            android:layout_marginTop="200dp"
+            android:text="분위기"
+            app:layout_constraintStart_toStartOf="@id/look_chart_total_cl"
+            app:layout_constraintTop_toBottomOf="@id/look_situation_tv"
+            style="@style/look_subtitle_tv"/>
+
+        <TextView
+            android:id="@+id/look_audio_tv"
+            android:layout_marginTop="200dp"
+            android:layout_marginBottom="800dp"
+            android:text="오디오"
+            app:layout_constraintStart_toStartOf="@id/look_chart_total_cl"
+            app:layout_constraintTop_toBottomOf="@id/look_mood_tv"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0"
+            style="@style/look_subtitle_tv"/>
+
         <ProgressBar
             android:id="@+id/look_loading_pb"
             android:layout_width="wrap_content"
@@ -279,7 +338,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
