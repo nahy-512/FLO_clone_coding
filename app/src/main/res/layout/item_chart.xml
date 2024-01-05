@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitCenter"
+            android:clipToOutline="true"
             android:src="@drawable/img_album_exp2" />
     </androidx.cardview.widget.CardView>
 
