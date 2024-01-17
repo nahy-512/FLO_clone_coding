@@ -2,8 +2,11 @@ package com.example.flo.ui.signin
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
+import com.example.flo.R
 import com.example.flo.data.entities.User
 import com.example.flo.data.remote.auth.AuthService
 import com.example.flo.data.remote.auth.LoginView
@@ -23,6 +26,7 @@ class LoginActivity: AppCompatActivity(), LoginView {
         setContentView(binding.root)
 
         initClickListener()
+        setSpinner()
     }
 
     private fun initClickListener() {
@@ -43,7 +47,7 @@ class LoginActivity: AppCompatActivity(), LoginView {
 
     private fun login() {
         // 이메일
-        if (binding.loginEmailIdEt.text.isEmpty() ||  binding.loginEmailSelectEt.text.toString().isEmpty()) {
+        if (binding.loginEmailIdEt.text.isEmpty()) {
             Toast.makeText(this, "이메일을 입력해 주세요.", Toast.LENGTH_SHORT).show()
             return
         }
@@ -54,8 +58,10 @@ class LoginActivity: AppCompatActivity(), LoginView {
         }
 
         // 사용자가 입력한 이메일, 비밀번호
-        val email: String = binding.loginEmailIdEt.text.toString() + "@" + binding.loginEmailSelectEt.text.toString()
+        val email: String = binding.loginEmailIdEt.text.toString() + "@" + binding.loginEmailSpinner.selectedItem
         val password: String = binding.signupPwdEt.text.toString()
+
+//        Toast.makeText(this, "email: $email\npassword: $password", Toast.LENGTH_SHORT).show()
 
         // 8주차 (roomDB)
 //        // DB 사용자 정보 확인
@@ -79,6 +85,12 @@ class LoginActivity: AppCompatActivity(), LoginView {
         authService.setLoginView(this)
         // API 호출
         authService.login(User(email, password, ""))
+    }
+
+    private fun setSpinner() {
+        // 이메일 도메인 선택 스피너 설정
+        val sAdapter = ArrayAdapter.createFromResource(this, R.array.emailDomain, R.layout.support_simple_spinner_dropdown_item)
+        binding.loginEmailSpinner.adapter = sAdapter
     }
 
     // 8주차 (roomDB)

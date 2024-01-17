@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true">
 
     <ImageView
@@ -54,18 +55,15 @@
             android:text="\@"
             android:textColor="@color/black"/>
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/login_email_select_et"
+        <Spinner
+            android:id="@+id/login_email_spinner"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_marginStart="5dp"
-            android:hint="직접 입력"
-            android:paddingBottom="25dp"
-            android:drawableEnd="@drawable/drawable_end_img_arrowdown_custom"
             android:backgroundTint="@color/gray_color"
-            android:textColorHint="@color/gray_color"
-            android:textSize="14sp"/>
+            android:spinnerMode="dropdown"
+            style="@style/Widget.AppCompat.Spinner.Underlined"/>
 
     </LinearLayout>
 

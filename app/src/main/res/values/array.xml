@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="emailDomain">
+        <item>직접 입력</item>
+        <item>naver.com</item>
+        <item>hanmail.net</item>
+        <item>daum.net</item>
+        <item>gmail.com</item>
+        <item>nate.com</item>
+        <item>hotmail.com</item>
+        <item>yahoo.co.kr</item>
+        <item>paran.com</item>
+        <item>lycos.co.kr</item>
+        <item>empal.com</item>
+        <item>cyworld.com</item>
+        <item>dreamwlz.com</item>
+    </string-array>
+</resources>
