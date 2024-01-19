@@ -58,7 +58,7 @@
             android:textColor="@color/black"/>
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/signup_email_select_et"
+            android:id="@+id/signup_email_domain_select_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

@@ -35,7 +35,7 @@ class SignUpActivity: AppCompatActivity(), SignUpView {
             signUp()
         }
         /* 이메일 도메인 선택 */
-        binding.signupEmailSelectEt.setOnClickListener {
+        binding.signupEmailDomainSelectEt.setOnClickListener {
             // 다이얼로그
             showDomainDialog()
         }
@@ -43,7 +43,7 @@ class SignUpActivity: AppCompatActivity(), SignUpView {
 
     private fun getUser(): User {
         // 사용자가 입력한 이메일, 비밀번호
-        val email: String = binding.signupEmailIdEt.text.toString() + "@" + binding.signupEmailSelectEt.text.toString()
+        val email: String = binding.signupEmailIdEt.text.toString() + "@" + binding.signupEmailDomainSelectEt.text.toString()
         val pwd: String = binding.signupPwdEt.text.toString()
         val name: String = binding.signupNameEt.text.toString()
 
@@ -77,7 +77,7 @@ class SignUpActivity: AppCompatActivity(), SignUpView {
     // 9주차 (서버 연동)
     private fun signUp() {
         // 이메일
-        if (binding.signupEmailIdEt.text.isEmpty() ||  binding.signupEmailSelectEt.text.toString().isEmpty()) {
+        if (binding.signupEmailIdEt.text.isEmpty() ||  binding.signupEmailDomainSelectEt.text.toString().isEmpty()) {
             Toast.makeText(this, "이메일 형식이 잘못되었습니다.", Toast.LENGTH_SHORT).show()
             return
         }
@@ -101,6 +101,12 @@ class SignUpActivity: AppCompatActivity(), SignUpView {
 
     private fun showDomainDialog() {
         val dialog = EmailDomainDialog()
+        dialog.setItemClickListener(object : EmailDomainDialog.EmailDomainClickInterface {
+            override fun onRadioButton(domain: String) {
+                binding.signupEmailDomainSelectEt.setText(domain)
+            }
+
+        })
         dialog.show(this.supportFragmentManager, "EmailDomainDialog")
     }
 
