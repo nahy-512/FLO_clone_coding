@@ -10,6 +10,7 @@ import com.example.flo.data.remote.auth.AuthResponse
 import com.example.flo.data.remote.auth.AuthService
 import com.example.flo.data.remote.auth.SignUpView
 import com.example.flo.databinding.ActivitySignupBinding
+import com.example.flo.utils.EmailDomainDialog
 
 class SignUpActivity: AppCompatActivity(), SignUpView {
 
@@ -32,6 +33,11 @@ class SignUpActivity: AppCompatActivity(), SignUpView {
         /* 회원가입 */
         binding.signupDoneBtn.setOnClickListener {
             signUp()
+        }
+        /* 이메일 도메인 선택 */
+        binding.signupEmailSelectEt.setOnClickListener {
+            // 다이얼로그
+            showDomainDialog()
         }
     }
 
@@ -91,6 +97,11 @@ class SignUpActivity: AppCompatActivity(), SignUpView {
         // API 호출
         authService.signUp(getUser())
         Log.d("SignUpActivity", "User: ${getUser()}")
+    }
+
+    private fun showDomainDialog() {
+        val dialog = EmailDomainDialog()
+        dialog.show(this.supportFragmentManager, "EmailDomainDialog")
     }
 
     override fun onSignUpSuccess(response: AuthResponse) {
